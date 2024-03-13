@@ -1,0 +1,25 @@
+{
+    "compilerOptions": {
+        "target": "ES2019",
+        "module": "CommonJS",
+        "moduleResolution": "node",
+        "lib": [
+            "es2022",
+            "dom"
+        ],
+        "esModuleInterop": true,
+        "resolveJsonModule": true,
+        "outDir": "./dist", 
+        "types": [
+            "node",
+            "webdriverio/async",
+            "@wdio/cucumber-framework",
+            "expect-webdriverio"
+        ],
+       
+    },
+    "include": [
+        "test",
+        "wdio.conf.ts"
+    ]
+}
