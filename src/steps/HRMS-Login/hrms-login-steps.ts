@@ -9,16 +9,15 @@ Then(/^I expect login page is displayed$/,async () => {
     await hrmsLoginPage.verifyLoginPage();
 });
 
-When(/^I enter the valid (.*) and (.*)$/,async (username:String,password:String) => {
-    throw new Error("6ttt6");
-    
+When(/^I enter the valid (.*) and (.*)$/,async (username:string,password:string) => {
+    await hrmsLoginPage.enterUsernameAndPassword(username,password);  
 });
 
 When(/^I click to the login button$/,async () => {
-    
+    await hrmsLoginPage.clickLoginBtn();
 });
 
 Then(/^I expect navigate to the HRMS dashboard page$/,async () => {
-    
+    await hrmsLoginPage.verifyDashboardPage();
 });
 

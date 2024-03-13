@@ -402,9 +402,9 @@ export const config: Options.Testrunner = {
     if (result.error) {
     await browser.takeScreenshot();
     }
-    // if (result.passed) {
-    //   await browser.takeScreenshot();
-    // }
+    else if (result.passed) {
+      await browser.takeScreenshot();
+    }
   },
   /**
    *
