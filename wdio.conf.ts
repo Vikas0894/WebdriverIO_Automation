@@ -20,7 +20,7 @@ let debug = process.env.DEBUG;
 
 console.log(`value of the headless: ${headless}`);
 
-export const config: Options.Testrunner = {
+export const config: WebdriverIO.Config = {
   //
   // ====================
   // Runner Configuration
@@ -77,7 +77,7 @@ export const config: Options.Testrunner = {
 
   // suites:{
 
-  
+
   // },
   //
   // ============
@@ -110,33 +110,33 @@ export const config: Options.Testrunner = {
       /*
       => Configuring tests in headless mode:-
           1. Add these flags as chrome options
-	            1. --headless
-	            2. --disable-dev-shm-usage
-	            3. --no-sandbox
-	            4. --window-size=1920,1080
-	            5. --disable-gpu
+              1. --headless
+              2. --disable-dev-shm-usage
+              3. --no-sandbox
+              4. --window-size=1920,1080
+              5. --disable-gpu
           2. Additional flags
-	            1. --proxy-server
-            	2. binary
-	            3. --auth-server-whitelist="   "
+              1. --proxy-server
+              2. binary
+              3. --auth-server-whitelist="   "
           3. Make use of process.env obj to set headless flag
   
 */
       maxInstances: 3,
       //
       browserName: "chrome",
-      /*"goog:chromeOptions": {
+      "goog:chromeOptions": {
         args:
-          headless.toUpperCase() == "Y"
+          headless.toUpperCase() === "Y"
             ? [
-                "--disable-web-security",
-                "--headless",
-                "--disable-dev-shm-usage",
-                "--no-sandbox",
-                "--window-size=1920,1080",
-              ]
+              "--disable-web-security",
+              "--headless",
+              "--disable-dev-shm-usage",
+              "--no-sandbox",
+              "--window-size=1920,1080",
+            ]
             : [],
-      },*/
+      },
       acceptInsecureCerts: true,
       timeouts: { implicit: 10000, pageLoad: 20000, script: 30000 },
       // If outputDir is provided WebdriverIO can capture driver session logs
@@ -152,7 +152,7 @@ export const config: Options.Testrunner = {
     //   browserName: "firefox",
     //   acceptInsecureCerts: true,
     //   timeouts: { implicit: 10000, pageLoad: 20000, script: 30000 },
-      
+
     // }
   ],
   //
@@ -244,8 +244,8 @@ export const config: Options.Testrunner = {
         useCucumberStepReporter: true,
       },
     ],
-    
-  ],  
+
+  ],
 
   //
   // If you are using Cucumber you need to specify the location of your step definitions.
@@ -269,7 +269,7 @@ export const config: Options.Testrunner = {
     // <string> (expression) only execute the features or scenarios with tags matching the expression
 
     // tagExpression: "@demo",
-    tagExpression: "@login",
+    tagExpression: "",
     // tagExpression: "@WebTable",
     // tagExpression: "@AdvancedScrolling",
     // tagExpression: "@IOofficialWebsite",
@@ -400,7 +400,7 @@ export const config: Options.Testrunner = {
 
     // Take screenshot if test case is failed
     if (result.error) {
-    await browser.takeScreenshot();
+      await browser.takeScreenshot();
     }
     else if (result.passed) {
       await browser.takeScreenshot();
@@ -426,9 +426,8 @@ export const config: Options.Testrunner = {
    */
   afterFeature: function (uri, feature) {
     // Add more environment details
-
-    allure.addEnvironment("Environment", browser.config.environment);
-    allure.addEnvironment("Middleware", "Dev environment");
+    allure.addEnvironment("ENVIRONMENT", config.environments);
+    //allure.addEnvironment("Middleware", "Dev environment");
   },
 
   /**

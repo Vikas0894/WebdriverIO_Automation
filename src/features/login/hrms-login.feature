@@ -1,6 +1,6 @@
 Feature: Login in HRMS application
 
-    @login
+    @login @hrms @e2e
     Scenario Outline: Login with Valid set of data
         Given I am on HRMS login page
         Then I expect login page is displayed

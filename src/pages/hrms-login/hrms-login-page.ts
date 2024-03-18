@@ -1,3 +1,4 @@
+import { config } from "../../../config/enviroments-config";
 import { timeouts } from "../../../config/timeouts-config";
 import { ButtonControl } from "../../base-controls/button-control";
 import { ElementControl } from "../../base-controls/element-control";
@@ -35,7 +36,7 @@ class HrmsLoginPage {
      */
     public async openHrmsApp(): Promise<void> {
         await browserMaximise();
-        await browserOpenUrl('https://account.superworks.com/login');
+        await browserOpenUrl(config.hrms);
     }
 
     public async verifyLoginPage(): Promise<void> {
