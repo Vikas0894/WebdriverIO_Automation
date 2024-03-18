@@ -46,7 +46,7 @@
     "typescript": "^4.7.4",
     "wdio-chromedriver-service": "^7.3.2",
     "wdio-geckodriver-service": "^2.1.2",
-    "winston": "^3.8.1",
+    "winston": "^3.12.0",
     "xlsx": "^0.18.5"
   }
 }
