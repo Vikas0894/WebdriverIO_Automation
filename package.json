@@ -4,6 +4,7 @@
   "description": "Automation framework to test web application,API and mobile app",
   "main": "index.js",
   "scripts": {
+    "test": "wdio wdio.conf.js --reporters allure",
     "windowHandle": "set HEADLESS=Y && npx wdio wdio.conf.ts --cucumberOpts.tagExpression='@window_handles'",
     "dev:hrmsLogin": "set HEADLESS=N && npx wdio ./config/enviroments-config.ts --cucumberOpts.tagExpression='@hrms'",
     "dev:productStore": "set HEADLESS=Y && set DEBUG=Y && npx wdio ./config/enviroments-config.ts --cucumberOpts.tagExpression='@product_store'",
