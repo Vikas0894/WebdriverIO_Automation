@@ -117,7 +117,7 @@ exports.config = {
       maxInstances: 3,
       //
       browserName: "chrome",
-      "goog:chromeOptions": {
+      /*"goog:chromeOptions": {
         args:
           headless.toUpperCase() === "Y"
             ? [
@@ -128,7 +128,7 @@ exports.config = {
               "--window-size=1920,1080",
             ]
             : [],
-      },
+      },*/
       acceptInsecureCerts: true,
       timeouts: { implicit: 10000, pageLoad: 20000, script: 30000 },
       // If outputDir is provided WebdriverIO can capture driver session logs
