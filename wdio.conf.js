@@ -1,19 +1,21 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
+var __importDefault =
+  (this && this.__importDefault) ||
+  function (mod) {
+    return mod && mod.__esModule ? mod : { default: mod };
+  };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.config = void 0;
 const allure_reporter_1 = __importDefault(require("@wdio/allure-reporter"));
 const fs_1 = __importDefault(require("fs"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
-let headless = process.env.HEADLESS;
+//let headless = process.env.HEADLESS;
 let debug = process.env.DEBUG;
 
-console.log(`value of the headless: ${headless}`);
+//console.log(`value of the headless: ${headless}`);
 exports.config = {
-    //
+  //
   // ====================
   // Runner Configuration
   // ====================
@@ -68,7 +70,6 @@ exports.config = {
   ],
 
   // suites:{
-
 
   // },
   //
@@ -154,7 +155,7 @@ exports.config = {
   // Define all options that are relevant for the WebdriverIO instance here
   //
   // Level of logging verbosity: trace | debug | info | warn | error | silent
-  logLevel: debug.toUpperCase() === "Y" ? "info" : "error",
+  logLevel: "error",
 
   //
   // Set specific log levels per logger
@@ -236,7 +237,6 @@ exports.config = {
         useCucumberStepReporter: true,
       },
     ],
-
   ],
 
   //
@@ -393,8 +393,7 @@ exports.config = {
     // Take screenshot if test case is failed
     if (result.error) {
       await browser.takeScreenshot();
-    }
-    else if (result.passed) {
+    } else if (result.passed) {
       await browser.takeScreenshot();
     }
   },
