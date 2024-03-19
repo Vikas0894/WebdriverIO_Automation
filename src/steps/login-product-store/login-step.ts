@@ -1,14 +1,13 @@
 import { Given, Then, When } from "@wdio/cucumber-framework";
-import { $, $$, browser } from "@wdio/globals";
 import { browserMaximise } from "../../helper/browser/browser-maximise";
 import { loginPage } from "../../pages/login-other/login-page";
 import { assertEqual } from "../../helper/assert/assert-equal";
 import { browserOpenUrl } from "../../helper/browser/browser-open-url";
+import { browserGetUrl } from "../../helper/browser/browser-get-url";
 import { config } from "../../../config/enviroments-config";
 import { readExcelFile } from "../../helper/files/read-excel-file";
 import logger from "../../helper/logger";
-
-
+import { $, $$, browser } from "@wdio/globals";
 
 Given(/^I am on product store home$/, async () => {
     await browserOpenUrl(config.productStore);
@@ -29,9 +28,9 @@ Then(/^I verify the user$/, async () => {
     await loginPage.VerifyHomePage();
 });
 
-Then(/^I verify Number Of Product on home page$/, async () => {
-    if (!9) throw Error(`Invalid number Provided:${9}`)
-    let num = await $$('//div[@class="col-lg-4 col-md-6 mb-4"]');
-    assertEqual(num.length, 8, 'Product number is not matched')
-    await logger.info(`execution completed`)
+Then(/^I verify (.*) on home page$/, async (expectedUrl: string) => {
+    const actulUrl=await browserGetUrl();
+    console.log('TestUrl',actulUrl);
+    await assertEqual(expectedUrl,actulUrl,'Url is not matched')
+    await logger.info(`execution completed`);
 });

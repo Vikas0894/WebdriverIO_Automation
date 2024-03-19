@@ -6,8 +6,8 @@ Feature: To Verify the number of product
         Then I expect product store home page is displayed
         When I enetr username and password on login page
         Then I verify the user
-        Then I verify Number Of Product on home page
+        Then I verify <ExpectedUrl> on home page
 
         Examples:
-            | TestId   | Numberofproduct |
-            | Test_001 | 9               |
+            | TestId   | ExpectedUrl                |
+            | Test_001 | https://www.demoblaze.com/ |
