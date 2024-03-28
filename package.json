@@ -8,7 +8,8 @@
     "windowHandle": "set HEADLESS=Y && npx wdio wdio.conf.ts --cucumberOpts.tagExpression='@window_handles'",
     "dev:hrmsLogin": "set HEADLESS=N && npx wdio ./config/enviroments-config.ts --cucumberOpts.tagExpression='@hrms'",
     "dev:productStore": "set HEADLESS=Y && set DEBUG=Y && npx wdio ./config/enviroments-config.ts --cucumberOpts.tagExpression='@product_store'",
-    "E2ETest": "set HEADLESS=N && npx wdio wdio.conf.ts --cucumberOpts.tagExpression='@e2e'"
+    "E2ETest": "set HEADLESS=N && npx wdio wdio.conf.ts --cucumberOpts.tagExpression='@e2e'",
+    "api_test_e2e": "set HEADLESS=N && npx wdio wdio.conf.ts --cucumberOpts.tagExpression='@api'"
   },
   "keywords": [
     "wdio",
@@ -23,6 +24,7 @@
     "@sendgrid/mail": "^7.7.0",
     "@types/chai": "^4.3.1",
     "@types/jquery": "^3.5.29",
+    "@types/supertest": "^6.0.2",
     "@wdio/allure-reporter": "^7.20.3",
     "@wdio/cli": "^7.20.5",
     "@wdio/cucumber-framework": "^7.20.3",
@@ -42,7 +44,7 @@
     "nodemailer": "^6.7.7",
     "npm": "^10.5.0",
     "parse": "^4.3.1",
-    "supertest": "^6.2.4",
+    "supertest": "^6.3.4",
     "ts-node": "^10.9.1",
     "typescript": "^4.7.4",
     "wdio-chromedriver-service": "^7.3.2",

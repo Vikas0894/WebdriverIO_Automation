@@ -1,0 +1,7 @@
+{
+  "REQRES": {
+    "GET_USER": "api/users",
+    "QUERY_PARAM": { "pages": 2 },
+    "CREATE_USER": "api/users"
+  }
+}

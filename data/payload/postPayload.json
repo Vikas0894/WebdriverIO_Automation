@@ -1,0 +1,9 @@
+{
+  "jsonPayload": {
+    "email": "george.bluth@reqres.in",
+    "first_name": "Vikas",
+    "last_name": "Kumar",
+    "avatar": null,
+    "job": "Automation Test Engineer"
+  }
+}
