@@ -10,7 +10,7 @@ const allure_reporter_1 = __importDefault(require("@wdio/allure-reporter"));
 const fs_1 = __importDefault(require("fs"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
-let headless = process.env.HEADLESS;
+//let headless = process.env.HEADLESS;
 let debug = process.env.DEBUG;
 
 //console.log(`value of the headless: ${headless}`);
@@ -128,19 +128,19 @@ exports.config = {
   
 */
       maxInstances: 3,
-      browserName: 'chrome',
-      "goog:chromeOptions": {
-        args:
-          headless.toUpperCase() === "Y"
-            ? [
-              "--disable-web-security",
-              "--headless",
-              "--disable-dev-shm-usage",
-              "--no-sandbox",
-              "--window-size=1920,1080",
-            ]
-            : [],
-      },
+      // browserName: 'chrome',
+      // "goog:chromeOptions": {
+      //   args:
+      //     headless.toUpperCase() === "Y"
+      //       ? [
+      //         "--disable-web-security",
+      //         "--headless",
+      //         "--disable-dev-shm-usage",
+      //         "--no-sandbox",
+      //         "--window-size=1920,1080",
+      //       ]
+      //       : [],
+      // },
       acceptInsecureCerts: true,
       timeouts: { implicit: 10000, pageLoad: 20000, script: 30000 },
       // If outputDir is provided WebdriverIO can capture driver session logs
