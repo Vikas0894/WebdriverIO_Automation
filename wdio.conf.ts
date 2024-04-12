@@ -251,7 +251,7 @@ export const config: WebdriverIO.Config = {
       'junit', {
         outputDir: "junit-reports",
         outputFileFormat: function (options) { // optional
-          return `results-${new Date().getDate()}.xml`
+          //return `results-${new Date().getDate()}.xml`
           return `results-${options.cid}.xml`
         }
       }

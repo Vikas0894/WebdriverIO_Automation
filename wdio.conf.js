@@ -10,7 +10,7 @@ const allure_reporter_1 = __importDefault(require("@wdio/allure-reporter"));
 const fs_1 = __importDefault(require("fs"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
-//let headless = process.env.HEADLESS;
+let headless = process.env.HEADLESS;
 let debug = process.env.DEBUG;
 
 //console.log(`value of the headless: ${headless}`);
