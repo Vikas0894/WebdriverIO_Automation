@@ -7,3 +7,8 @@ export const config = Object.assign(baseconfig, {
    hrms: 'https://account.superworks.com/login/',
    reqresBaseURL: 'https://reqres.in/'
 });
+
+export const getPathAndriodApp = (): string => {
+   let path = '../app/android/Android_Demo_App.apk';
+   return path;
+}

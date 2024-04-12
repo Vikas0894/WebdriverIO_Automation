@@ -1,5 +1,6 @@
 #Project Specific
 allure-results
+allure-report
 debug
 # Logs
 logs

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites tests="1" failures="0" errors="0" skipped="0">
+  <testsuite name="To Verify the url" timestamp="2024-04-11T23:11:51" time="9.502" tests="1" failures="0" errors="0" skipped="0">
+    <properties>
+      <property name="specId" value="0"/>
+      <property name="featureName" value="To Verify the url"/>
+      <property name="capabilities" value="chrome.123_0_6312_122.windows"/>
+      <property name="featureFile" value=".\src\features\product-store\product-store.feature"/>
+    </properties>
+    <testcase classname="CucumberJUnitReport-chrome.123_0_6312_122.windows.To Verify the url" name="Product Store login and verify url" time="9.462">
+      <system-out><![CDATA[
+✅ Given I am on product store home✅ Then I expect product store home page is displayed✅ When I enetr username and password on login page✅ Then I verify the user✅ Then I verify https://www.demoblaze.com/ on home page
+]]></system-out>
+    </testcase>
+  </testsuite>
+</testsuites>

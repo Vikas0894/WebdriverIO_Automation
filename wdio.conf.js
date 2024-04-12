@@ -47,6 +47,8 @@ exports.config = {
     //     baseUrl: './'
     // }
   },
+
+  //port: 4723,
   //
   // ==================
   // Specify Test Files
@@ -70,6 +72,7 @@ exports.config = {
   ],
 
   // suites:{
+
 
   // },
   //
@@ -100,6 +103,15 @@ exports.config = {
       // grid with only 5 firefox instances available you can make sure that not more than
       // 5 instances get started at a time.
 
+      // capabilities for local Appium web tests on an Android Emulator
+      // "appium:appPackage": "com.code2lead.kwad",
+      // "appium:appActivity": "com.code2lead.kwad.MainActivity",
+      // "platformName": "Android",
+      // "appium:deviceName": "Pixel_3a",
+      // "appium:udid": "065613117T112979",
+      // "appium:automationName": "UiAutomator2",
+      // "appium:app": "C://WebdriverIOAutomation/app/android/Android_Demo_App.apk",
+
       /*
       => Configuring tests in headless mode:-
           1. Add these flags as chrome options
@@ -116,9 +128,8 @@ exports.config = {
   
 */
       maxInstances: 3,
-      //
-      browserName: "chrome",
-      /*"goog:chromeOptions": {
+      browserName: 'chrome',
+      "goog:chromeOptions": {
         args:
           headless.toUpperCase() === "Y"
             ? [
@@ -129,7 +140,7 @@ exports.config = {
               "--window-size=1920,1080",
             ]
             : [],
-      },*/
+      },
       acceptInsecureCerts: true,
       timeouts: { implicit: 10000, pageLoad: 20000, script: 30000 },
       // If outputDir is provided WebdriverIO can capture driver session logs
@@ -155,7 +166,7 @@ exports.config = {
   // Define all options that are relevant for the WebdriverIO instance here
   //
   // Level of logging verbosity: trace | debug | info | warn | error | silent
-  logLevel: "error",
+  logLevel: debug.toUpperCase() === "Y" ? "info" : "error",
 
   //
   // Set specific log levels per logger
@@ -168,8 +179,8 @@ exports.config = {
   // - @wdio/cli, @wdio/config, @wdio/utils
   // Level of logging verbosity: trace | debug | info | warn | error | silent
   // logLevels: {
-  //     webdriver: 'info',
-  //     '@wdio/appium-service': 'info'
+  //   webdriver: 'info',
+  //   '@wdio/appium-service': 'info'
   // },
   //
   // If you only want to run your tests until a specific amount of tests have failed use
@@ -205,7 +216,7 @@ exports.config = {
 
   // cross browser service
   //services: ["chromedriver", "geckodriver"],
-  services: ["chromedriver"],
+  services: ['chromedriver'],
 
   // Framework you want to run your specs with.
   // The following are supported: Mocha, Jasmine, and Cucumber
@@ -214,19 +225,21 @@ exports.config = {
   // Make sure you have the wdio adapter package for the specific framework installed
   // before running any tests.
   framework: "cucumber",
-  //
-  // The number of times to retry the entire specfile when it fails as a whole
-  // specFileRetries: 1,
-  //
-  // Delay in seconds between the spec file retry attempts
-  // specFileRetriesDelay: 0,
-  //
-  // Whether or not retried specfiles should be retried immediately or deferred to the end of the queue
-  // specFileRetriesDeferred: false,
-  //
-  // Test reporter for stdout.
-  // The only one supported by default is 'dot'
-  // see also: https://webdriver.io/docs/dot-reporter
+  /**
+  *The number of times to retry the entire specfile when it fails as a whole
+  *specFileRetries: 1,
+  
+  *Delay in seconds between the spec file retry attempts
+  *specFileRetriesDelay: 0,
+  
+  Whether or not retried specfiles should be retried immediately or deferred to the end of the queue
+  specFileRetriesDeferred: false,
+  
+  Test reporter for stdout.
+  The only one supported by default is 'dot'
+  see also: https://webdriver.io/docs/dot-reporter
+*/
+
   reporters: [
     "spec",
     [
@@ -234,12 +247,20 @@ exports.config = {
       {
         outputDir: "allure-results",
         disableWebdriverStepsReporting: true,
+        disableWebdriverScreenshotsReporting: false,
         useCucumberStepReporter: true,
       },
+
+      'junit', {
+        outputDir: "junit-reports",
+        outputFileFormat: function (options) { // optional
+          return `results-${new Date().getDate()}.xml`
+          return `results-${options.cid}.xml`
+        }
+      }
     ],
   ],
 
-  //
   // If you are using Cucumber you need to specify the location of your step definitions.
   cucumberOpts: {
     // <string[]> (file/dir) require files before executing features
@@ -391,9 +412,7 @@ exports.config = {
     console.log(`>> context is: ${JSON.stringify(context)}`);
 
     // Take screenshot if test case is failed
-    if (result.error) {
-      await browser.takeScreenshot();
-    } else if (result.passed) {
+    if (!result.passed) {
       await browser.takeScreenshot();
     }
   },
@@ -417,8 +436,8 @@ exports.config = {
    */
   afterFeature: function (uri, feature) {
     // Add more environment details
-    allure.addEnvironment("ENVIRONMENT", config.environments);
-    //allure.addEnvironment("Middleware", "Dev environment");
+    allure.addEnvironment('ENVIRONMENT', config.environments);
+    allure.addEnvironment('BROWSER', browserName);
   },
 
   /**

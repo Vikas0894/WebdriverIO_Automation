@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "target": "ES2019",
+        "target": "ES2022",
         "module": "CommonJS",
         "moduleResolution": "node",
         "lib": [
@@ -14,7 +14,9 @@
             "node",
             "webdriverio/async",
             "@wdio/cucumber-framework",
-            "expect-webdriverio"
+            "expect-webdriverio",
+            "@wdio/appium-service",
+            "@wdio/junit-reporter"
         ],
        
     },
