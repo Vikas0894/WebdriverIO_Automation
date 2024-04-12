@@ -73,7 +73,6 @@ exports.config = {
 
   // suites:{
 
-
   // },
   //
   // ============
@@ -128,7 +127,7 @@ exports.config = {
   
 */
       maxInstances: 3,
-      // browserName: 'chrome',
+      browserName: "chrome",
       // "goog:chromeOptions": {
       //   args:
       //     headless.toUpperCase() === "Y"
@@ -216,7 +215,7 @@ exports.config = {
 
   // cross browser service
   //services: ["chromedriver", "geckodriver"],
-  services: ['chromedriver'],
+  services: ["chromedriver"],
 
   // Framework you want to run your specs with.
   // The following are supported: Mocha, Jasmine, and Cucumber
@@ -251,13 +250,15 @@ exports.config = {
         useCucumberStepReporter: true,
       },
 
-      'junit', {
+      "junit",
+      {
         outputDir: "junit-reports",
-        outputFileFormat: function (options) { // optional
-          return `results-${new Date().getDate()}.xml`
-          return `results-${options.cid}.xml`
-        }
-      }
+        outputFileFormat: function (options) {
+          // optional
+          //return `results-${new Date().getDate()}.xml`;
+          return `results-${options.cid}.xml`;
+        },
+      },
     ],
   ],
 
@@ -436,8 +437,8 @@ exports.config = {
    */
   afterFeature: function (uri, feature) {
     // Add more environment details
-    allure.addEnvironment('ENVIRONMENT', config.environments);
-    allure.addEnvironment('BROWSER', browserName);
+    allure.addEnvironment("ENVIRONMENT", config.environments);
+    allure.addEnvironment("BROWSER", browserName);
   },
 
   /**
