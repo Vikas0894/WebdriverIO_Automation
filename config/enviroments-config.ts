@@ -1,6 +1,6 @@
 import { config as baseconfig } from '../wdio.conf';
 
-export const config = Object.assign(baseconfig, {
+export const configs = Object.assign(baseconfig, {
    environments: 'dev',
    productStore: 'https://www.demoblaze.com/',
    windowHandle: 'https://demo.automationtesting.in/Windows.html',
@@ -9,6 +9,6 @@ export const config = Object.assign(baseconfig, {
 });
 
 export const getPathAndriodApp = (): string => {
-   let path = '../app/android/Android_Demo_App.apk';
+   let path = '/app/android/Android_Demo_App.apk';
    return path;
 }

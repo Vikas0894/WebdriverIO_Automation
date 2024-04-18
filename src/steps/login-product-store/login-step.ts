@@ -4,13 +4,13 @@ import { loginPage } from "../../pages/login-other/login-page";
 import { assertEqual } from "../../helper/assert/assert-equal";
 import { browserOpenUrl } from "../../helper/browser/browser-open-url";
 import { browserGetUrl } from "../../helper/browser/browser-get-url";
-import { config } from "../../../config/enviroments-config";
+import { configs } from "../../../config/enviroments-config";
 import { readExcelFile } from "../../helper/files/read-excel-file";
 import logger from "../../helper/logger";
 import { $, $$, browser } from "@wdio/globals";
 
 Given(/^I am on product store home$/, async () => {
-    await browserOpenUrl(config.productStore);
+    await browserOpenUrl(configs.productStore);
     await browserMaximise();
     await logger.info(`execution started`)
 });

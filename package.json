@@ -5,12 +5,13 @@
   "main": "index.js",
   "scripts": {
     "test": "wdio wdio.conf.js --reporters allure",
-    "windowHandle": "set HEADLESS=Y && npx wdio wdio.conf.ts --cucumberOpts.tagExpression='@window_handles'",
-    "dev:hrmsLogin": "set HEADLESS=N && npx wdio ./config/enviroments-config.ts --cucumberOpts.tagExpression='@hrms'",
-    "dev:productStore": "set HEADLESS=Y && set DEBUG=Y && npx wdio ./config/enviroments-config.ts --cucumberOpts.tagExpression='@product_store'",
+    "dev:hrmsLogin": "set HEADLESS=N && npx wdio wdio.conf.ts --cucumberOpts.tagExpression='@hrms'",
+    "dev:productStore": "set HEADLESS=Y && npx wdio wdio.conf.ts --cucumberOpts.tagExpression='@product_store'",
     "E2ETest": "set HEADLESS=N && npx wdio wdio.conf.ts --cucumberOpts.tagExpression='@e2e'",
-    "api_test_e2e": "set HEADLESS=N && npx wdio wdio.conf.ts --cucumberOpts.tagExpression='@api'",
+    "api_test_e2e": "set HEADLESS=Y && npx wdio wdio.conf.ts --cucumberOpts.tagExpression='@api'",
     "mobile_e2e": "set HEADLESS=N && npx wdio ./config/mobile-config.ts --cucumberOpts.tagExpression='@mobile'",
+    "smoke_suites": "set HEADLESS=N && npx wdio wdio.conf.ts --cucumberOpts.tagExpression='@smoke'",
+    "regression_suites": "set HEADLESS=N &&npx wdio wdio.conf.ts --cucumberOpts.tagExpression='@regression'",
     "reports": "allure generate allure-results --clean  && allure open"
   },
   "keywords": [
@@ -19,9 +20,10 @@
     "e2e",
     "tests"
   ],
-  "author": "Vikas",
+  "author": "Vikas Kumar",
   "license": "ISC",
   "devDependencies": {
+    "@applitools/eyes-sdk-core": "^13.11.34",
     "@cucumber/cucumber": "^10.4.0",
     "@playwright/test": "^1.24.1",
     "@sendgrid/mail": "^7.7.0",
@@ -39,9 +41,11 @@
     "@wdio/local-runner": "^7.20.5",
     "@wdio/spec-reporter": "^7.20.3",
     "@wdio/utils": "^8.35.0",
+    "@wdio/visual-service": "^4.1.0",
     "allure-playwright": "^2.0.0-beta.18",
     "app-root-path": "^3.0.0",
-    "appium": "^2.5.1",
+    "appium": "^2.5.2",
+    "appium-doctor": "^1.16.2",
     "appium-uiautomator2-driver": "^3.0.6",
     "chai": "^4.3.6",
     "chromedriver": "^123.0.1",

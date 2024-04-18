@@ -1,4 +1,4 @@
-// @ts-nocheck
+//@ts-nocheck
 import { Capabilities } from '@wdio/types';
 import { path } from "app-root-path";
 import { config as configuration } from "dotenv";
@@ -68,9 +68,9 @@ export const config: WebdriverIO.Config = {
     // 'path/to/excluded/files'
   ],
 
-  // suites:{
-
-
+  // suites: {
+  //   smoke: ["./test-suites/smoke/**/*.feature"],
+  //   regression: ["./test-suites/regression/**/*.feature"]
   // },
   //
   // ============
@@ -247,7 +247,8 @@ export const config: WebdriverIO.Config = {
         disableWebdriverScreenshotsReporting: false,
         useCucumberStepReporter: true,
       },
-
+    ],
+    [
       'junit', {
         outputDir: "junit-reports",
         outputFileFormat: function (options) { // optional
@@ -304,7 +305,7 @@ export const config: WebdriverIO.Config = {
    * @param {Array.<Object>} capabilities list of capabilities details
    */
   onPrepare: function (config, capabilities) {
-    if (process.env.RUNNER === "LOCAL" && fs.existSync("./allure-results")) {
+    if (process.env.RUNNER === "LOCAL" && fs.existsSync("./allure-results")) {
       fs.rmdirSync("./allure-results", { recursive: true });
     }
   },
@@ -409,9 +410,7 @@ export const config: WebdriverIO.Config = {
     console.log(`>> context is: ${JSON.stringify(context)}`);
 
     // Take screenshot if test case is failed
-    if (!result.passed) {
-      await browser.takeScreenshot();
-    }
+    await browser.takeScreenshot();
   },
   /**
    *

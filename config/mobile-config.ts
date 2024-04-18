@@ -1,22 +1,17 @@
-// @ts-nocheck
-
-import type { Options } from "@wdio/types";
+//@ts-nocheck
 import { path } from "app-root-path";
 import { config as configuration } from "dotenv";
 import fs from "fs";
-import ts = require("typescript");
 console.log("appRoot", path);
 configuration({ path: `${path}/.env` });
+import { configs } from "../config/enviroments-config";
 import allure from "@wdio/allure-reporter";
-import type { join } from "path";
-import sendemail from "../../helper/sendemail"
-
-let headless = process.env.HEADLESS;
-let debug = process.env.DEBUG;
+import { join } from "path";
+import { getPathAndriodApp } from "../config/enviroments-config";
+import { appiumServer } from "../src/helper/appium-server";
 
 export const config: WebdriverIO.Config = {
-  //
-  // ====================
+
   // Runner Configuration
   // ====================
   //
@@ -35,21 +30,14 @@ export const config: WebdriverIO.Config = {
 
   autoCompileOpts: {
     autoCompile: true,
-    // see https://github.com/TypeStrong/ts-node#cli-and-programmatic-options
-    // for all available options
     tsNodeOpts: {
       transpileOnly: true,
       project: "./tsconfig.json",
     },
-    // tsconfig-paths is only used if "tsConfigPathsOpts" are provided, if you
-    // do please make sure "tsconfig-paths" is installed as dependency
-    // tsConfigPathsOpts: {
-    //     baseUrl: './'
-    // }
   },
 
   port: 4723,
-  //
+
   // ==================
   // Specify Test Files
   // ==================
@@ -72,11 +60,8 @@ export const config: WebdriverIO.Config = {
   ],
 
   // suites:{
-
-
   // },
-  //
-  // ============
+
   // Capabilities
   // ============
   // Define your capabilities here. WebdriverIO can run multiple capabilities at the same
@@ -104,44 +89,16 @@ export const config: WebdriverIO.Config = {
       // 5 instances get started at a time.
 
       // capabilities for local Appium web tests on an Android Emulator
+      "platformName": "Android",
+      "appium:deviceName": "Pixel 8",
+      'appium:platformVersion': '13',
+      "appium:automationName": "UiAutomator2",
       "appium:appPackage": "com.code2lead.kwad",
       "appium:appActivity": "com.code2lead.kwad.MainActivity",
-      "platformName": "Android",
-      "appium:deviceName": "Pixel_3a",
-      "appium:udid": "065613117T112979",
-      "appium:automationName": "UiAutomator2",
-      "appium:app": "C://WebdriverIOAutomation/app/android/Android_Demo_App.apk",
+      'appium:app': join(process.cwd(), getPathAndriodApp()),
+      //"appium:udid": "065613117T112979", //for real device
 
-      /*
-      => Configuring tests in headless mode:-
-          1. Add these flags as chrome options
-              1. --headless
-              2. --disable-dev-shm-usage
-              3. --no-sandbox
-              4. --window-size=1920,1080
-              5. --disable-gpu
-          2. Additional flags
-              1. --proxy-server
-              2. binary
-              3. --auth-server-whitelist="   "
-          3. Make use of process.env obj to set headless flag
-  
-*/
-      maxInstances: 3,
-      //
-      //browserName: "chrome",
-      "goog:chromeOptions": {
-        args:
-          headless.toUpperCase() === "Y"
-        // ? [
-        //   "--disable-web-security",
-        //   "--headless",
-        //   "--disable-dev-shm-usage",
-        //   "--no-sandbox",
-        //   "--window-size=1920,1080",
-        // ]
-        // : [],
-      },
+      maxInstances: 1,
       acceptInsecureCerts: true,
       timeouts: { implicit: 10000, pageLoad: 20000, script: 30000 },
       // If outputDir is provided WebdriverIO can capture driver session logs
@@ -149,25 +106,15 @@ export const config: WebdriverIO.Config = {
       // excludeDriverLogs: ['*'], // pass '*' to exclude all driver session logs
       // excludeDriverLogs: ['bugreport', 'server'],
     },
-
-    // {
-    //  // cross browser
-    //   maxInstances: 3,
-    //   //
-    //   browserName: "firefox",
-    //   acceptInsecureCerts: true,
-    //   timeouts: { implicit: 10000, pageLoad: 20000, script: 30000 },
-
-    // }
   ],
-  //
+
   // ===================
   // Test Configurations
   // ===================
   // Define all options that are relevant for the WebdriverIO instance here
   //
-  // Level of logging verbosity: trace | debug | info | warn | error | silent
-  logLevel: debug.toUpperCase() === "Y" ? "info" : "error",
+  //Level of logging verbosity: trace | debug | info | warn | error | silent
+  logLevel: "error",
 
   //
   // Set specific log levels per logger
@@ -180,8 +127,8 @@ export const config: WebdriverIO.Config = {
   // - @wdio/cli, @wdio/config, @wdio/utils
   // Level of logging verbosity: trace | debug | info | warn | error | silent
   logLevels: {
-    webdriver: 'info',
-    '@wdio/appium-service': 'info'
+    webdriver: 'error',
+    '@wdio/appium-service': 'error'
   },
   //
   // If you only want to run your tests until a specific amount of tests have failed use
@@ -192,11 +139,6 @@ export const config: WebdriverIO.Config = {
   // with `/`, the base url gets prepended, not including the path portion of your baseUrl.
   // If your `url` parameter starts without a scheme or `/` (like `some/path`), the base url
   // gets prepended directly.
-
-  // baseUrl: "https://admin:admin@the-internet.herokuapp.com",
-  // baseUrl: "https://the-internet.herokuapp.com",
-  // baseUrl: "https://www.amazon.com",
-  // baseUrl: "https://www.saucedemo.com/",
   // baseUrl: "http://localhost",
 
   //
@@ -217,7 +159,7 @@ export const config: WebdriverIO.Config = {
 
   // cross browser service
   //services: ["chromedriver", "geckodriver"],
-  services: ['chromedriver', 'appium'],
+  services: ['appium'],
 
   // Framework you want to run your specs with.
   // The following are supported: Mocha, Jasmine, and Cucumber
@@ -246,10 +188,10 @@ export const config: WebdriverIO.Config = {
       {
         outputDir: "allure-results",
         disableWebdriverStepsReporting: true,
+        disableWebdriverScreenshotsReporting: false,
         useCucumberStepReporter: true,
       },
     ],
-
   ],
 
   //
@@ -272,12 +214,7 @@ export const config: WebdriverIO.Config = {
     // <boolean> fail if there are any undefined or pending steps
     strict: false,
     // <string> (expression) only execute the features or scenarios with tags matching the expression
-
-    // tagExpression: "@demo",
     tagExpression: "",
-    // tagExpression: "@WebTable",
-    // tagExpression: "@AdvancedScrolling",
-    // tagExpression: "@IOofficialWebsite",
 
     // <number> timeout for step definitions
     timeout: 300000,
@@ -285,7 +222,6 @@ export const config: WebdriverIO.Config = {
     ignoreUndefinedDefinitions: false,
   },
 
-  //
   // =====
   // Hooks
   // =====
@@ -299,7 +235,7 @@ export const config: WebdriverIO.Config = {
    * @param {Array.<Object>} capabilities list of capabilities details
    */
   onPrepare: function (config, capabilities) {
-    if (process.env.RUNNER === "LOCAL" && fs.existSync("./allure-results")) {
+    if (process.env.RUNNER === "LOCAL" && fs.existsSync("./allure-results")) {
       fs.rmdirSync("./allure-results", { recursive: true });
     }
   },
@@ -404,12 +340,7 @@ export const config: WebdriverIO.Config = {
     console.log(`>> context is: ${JSON.stringify(context)}`);
 
     // Take screenshot if test case is failed
-    if (result.error) {
-      await browser.takeScreenshot();
-    }
-    else if (result.passed) {
-      await browser.takeScreenshot();
-    }
+    await browser.takeScreenshot();
   },
   /**
    *
@@ -421,8 +352,9 @@ export const config: WebdriverIO.Config = {
    * @param {number}                 result.duration  duration of scenario in milliseconds
    * @param {Object}                 context          Cucumber World object
    */
-  // afterScenario: function (world, result, context) {
-  // },
+  afterScenario: async function (world, result, context) {
+    await browser.takeScreenshot();
+  },
   /**
    *
    * Runs after a Cucumber Feature.
@@ -431,8 +363,7 @@ export const config: WebdriverIO.Config = {
    */
   afterFeature: function (uri, feature) {
     // Add more environment details
-    allure.addEnvironment("ENVIRONMENT", config.environments);
-    //allure.addEnvironment("Middleware", "Dev environment");
+    allure.addEnvironment("ENVIRONMENT", configs.environments);
   },
 
   /**
@@ -478,4 +409,14 @@ export const config: WebdriverIO.Config = {
    */
   // onReload: function(oldSessionId, newSessionId) {
   // }
+
+  before: async () => {
+    // Start the Appium server before running tests
+    await appiumServer.start();
+  },
+
+  after: async () => {
+    // Stop the Appium server after tests
+    await appiumServer.stop();
+  },
 };

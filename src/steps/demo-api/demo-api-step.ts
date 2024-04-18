@@ -3,7 +3,7 @@ import reporter from '../../helper/reporter';
 import constant from '../../../data/constant.json'
 import postPayload from '../../../data/payload/postPayload.json'
 import { apiMethods } from '../../helper/api-helper';
-import { config } from '../../../config/enviroments-config';
+import { configs } from '../../../config/enviroments-config';
 import fs from 'fs';
 import { assert } from 'chai';
 import report from '@wdio/allure-reporter'
@@ -20,9 +20,9 @@ Given(/^get list of (.*) from reqres.in$/, async (endPointRef) => {
         report.addStep(`Validate end point: ${endPoint}`);
         if (!endPoint) throw Error(`${endPoint} is not valid endpoint.`);
         let res;
-        res = await apiMethods.getAllUsers(config.reqresBaseURL, endPoint, "", constant.REQRES.QUERY_PARAM);
+        res = await apiMethods.getAllUsers(configs.reqresBaseURL, endPoint, "", constant.REQRES.QUERY_PARAM);
         report.addStep(`Validate status code:  ${res.status}`);
-        if (res.status !== 200) assert.fail(`Failed getting user from ${config.reqresBaseURL}/${endPoint}`);
+        if (res.status !== 200) assert.fail(`Failed getting user from ${configs.reqresBaseURL}/${endPoint}`);
         let data = JSON.stringify(res.body);
         report.addStep(`Fetch the response: ${data}`);
         let fileName = `${process.cwd()}/data/api-res/resreqAPIUsers.json`;
@@ -42,9 +42,9 @@ Given(/^Create a (.*) in reqres.in$/, async (endPointRef) => {
         report.addStep(`Validate end point: ${endPoint}`);
         if (!endPoint) throw Error(`${endPoint} is not valid endpoint.`);
         let res;
-        res = await apiMethods.createUser(config.reqresBaseURL, endPoint, "", postPayload.jsonPayload);
+        res = await apiMethods.createUser(configs.reqresBaseURL, endPoint, "", postPayload.jsonPayload);
         report.addStep(`Validate status code:  ${res.status}`);
-        if (res.status !== 201) assert.fail(`Failed to create user from ${config.reqresBaseURL}/${endPoint}`);
+        if (res.status !== 201) assert.fail(`Failed to create user from ${configs.reqresBaseURL}/${endPoint}`);
         let data = JSON.stringify(res.body);
         report.addStep(`Fetch the response: ${data}`);
         let fileName = `${process.cwd()}/data/api-res/resreqAPICreateUsers.json`;

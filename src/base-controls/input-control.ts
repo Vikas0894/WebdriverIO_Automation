@@ -13,15 +13,15 @@ export class InputControl extends ElementControl {
         while ((await this.getValue()) !== '') {
             await this.el.click();
 
-            // for (let i = 0; i <= 10; i++) {
-            //     if (driver.isIOS) {
-            //         await driver.sendKeys(['\b']);
-            //     } else if (driver.isAndroid) {
-            //         await driver.pressKeyCode(67);
-            //     } else {
-            //         await browserKeys(['Backspace']);
-            //     }
-            // }
+            for (let i = 0; i <= 10; i++) {
+                if (driver.isIOS) {
+                    await driver.sendKeys(['\b']);
+                } else if (driver.isAndroid) {
+                    await driver.pressKeyCode(67);
+                } else {
+                    await browserKeys(['Backspace']);
+                }
+            }
         }
     }
 }
