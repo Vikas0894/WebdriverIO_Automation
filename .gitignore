@@ -1,7 +1,7 @@
 #Project Specific
 allure-results
 allure-report
-junit-reports
+
 debug
 # Logs
 logs
