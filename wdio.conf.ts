@@ -13,6 +13,7 @@ dotenv.config();
 const headless = process.env.HEADLESS === 'true';
 const debug: boolean = process.env.DEBUG === 'true';
 
+
 export const config: WebdriverIO.Config = {
   //
   // ====================
@@ -146,17 +147,17 @@ export const config: WebdriverIO.Config = {
       // it is possible to configure which logTypes to include/exclude.
       // excludeDriverLogs: ['*'], // pass '*' to exclude all driver session logs
       // excludeDriverLogs: ['bugreport', 'server'],
-    },
+    //},
 
     // {
-    //  // cross browser
-    //   maxInstances: 3,
-    //   //
-    //   browserName: "firefox",
-    //   acceptInsecureCerts: true,
-    //   timeouts: { implicit: 10000, pageLoad: 20000, script: 30000 },
+     // cross browser
+      // maxInstances: 3,
+      // //
+      // browserName: "firefox",
+      // acceptInsecureCerts: true,
+      // timeouts: { implicit: 10000, pageLoad: 20000, script: 30000 },
 
-    // }
+     }
   ],
   //
   // ===================
@@ -207,8 +208,8 @@ export const config: WebdriverIO.Config = {
   // commands. Instead, they hook themselves up into the test process.
 
   // cross browser service
-  //services: ["chromedriver", "geckodriver"],
-  services: ['chromedriver'],
+  //services: ["geckodriver"],
+ services: ['chromedriver'],
 
   // Framework you want to run your specs with.
   // The following are supported: Mocha, Jasmine, and Cucumber
@@ -238,20 +239,20 @@ export const config: WebdriverIO.Config = {
       "allure",
       {
         outputDir: "allure-results",
+        useCucumberStepReporter: true,
         disableWebdriverStepsReporting: true,
         disableWebdriverScreenshotsReporting: false,
-        useCucumberStepReporter: true,
       },
     ],
-    [
-      'junit', {
-        outputDir: "junit-reports",
-        outputFileFormat: function (options) { // optional
-          //return `results-${new Date().getDate()}.xml`
-          return `results-${options.cid}.xml`
-        }
-      }
-    ],
+    // [
+    //   'junit', {
+    //     outputDir: "junit-reports",
+    //     outputFileFormat: function (options) { // optional
+    //       //return `results-${new Date().getDate()}.xml`
+    //       return `results-${options.cid}.xml`
+    //     }
+    //   }
+    // ],
   ],
 
   // If you are using Cucumber you need to specify the location of your step definitions.
@@ -452,7 +453,7 @@ export const config: WebdriverIO.Config = {
    * @param {<Object>} results object containing test results
    */
   onComplete: async function (exitCode, config, capabilities, results) {
-    await after();
+    //await after();
   },
   /**
    * Gets executed when a refresh happens.
