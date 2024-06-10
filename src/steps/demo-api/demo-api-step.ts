@@ -28,7 +28,8 @@ Given(/^get list of (.*) from reqres.in$/, async (endPointRef) => {
         let fileName = `${process.cwd()}/data/api-res/resreqAPIUsers.json`;
         fs.writeFileSync(fileName, data);
     } catch (err) {
-        throw new Error(`${endPointRef}${err.message}`);
+        const error = err as Error;
+        throw new Error(`${endPointRef}${error.message}`);
     }
 });
 
@@ -50,6 +51,7 @@ Given(/^Create a (.*) in reqres.in$/, async (endPointRef) => {
         let fileName = `${process.cwd()}/data/api-res/resreqAPICreateUsers.json`;
         fs.writeFileSync(fileName, data);
     } catch (err) {
-        throw new Error(`${endPointRef}${err.message}`);
+        const error =err as Error;
+        throw new Error(`${endPointRef}${error.message}`);
     }
 });

@@ -1,10 +1,21 @@
 import { readExcelFile } from "./read-excel-file";
 
-const rowInput = readExcelFile('./data/testData.xlsx','TestData');
-export let validExcelCredential: any = {
-    username: rowInput[0].USERNAME,
-    password: rowInput[0].PASSWORD,
-};
+async function loadExcelCredentials() {
+    const rowInput = await readExcelFile('./data/testData.xlsx', 'TestData');
+    return {
+        username: rowInput[0].USERNAME,
+        password: rowInput[0].PASSWORD,
+    };
+}
+
+export let validExcelCredential: any;
+
+loadExcelCredentials().then(credentials => {
+    validExcelCredential = credentials;
+}).catch(error => {
+    console.error('Error loading Excel credentials:', error);
+});
+
 
 
 

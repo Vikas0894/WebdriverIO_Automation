@@ -15,7 +15,8 @@ class ApiMethods {
                 .set('Content-Type', 'application/json')
                 .set('Accept', 'application/json');
         } catch (err) {
-            throw new Error(`Somthing getting wrong in payload.${err.message}`);
+            const error = err as Error;
+            throw new Error(`Somthing getting wrong in payload.${error.message}`);
         }
     }
 
@@ -33,7 +34,8 @@ class ApiMethods {
                 .set("Accept", "application/json")
                 .send(payload)
         } catch (err) {
-            err.message = `Error making a POST call to ${endpoint}, ${err}`
+            const error = err as Error;
+            error.message = `Error making a POST call to ${endpoint}, ${err}`
             throw err
         }
     }

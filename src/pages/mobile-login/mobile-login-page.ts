@@ -56,7 +56,7 @@ class MobileLoginPage {
     }
 
     public async clickOnLoginOption(): Promise<void> {
-        //await (await this.getLoginOptionEl()).waitForClickable(timeouts.medium, 'Login option is not clickable');
+        //await (await $('//android.widget.Button[@content-desc="Btn5"]')).scrollIntoView(true);
         await (await this.getLoginOptionEl()).click();
     }
 
@@ -66,7 +66,6 @@ class MobileLoginPage {
     }
 
     public async clickOnLoginButton(): Promise<void> {
-        //await (await this.getLoginBtnEl()).waitForClickable(timeouts.medium, 'Login Button is not clickable');
         await (await this.getLoginBtnEl()).click();
     }
 
@@ -79,7 +78,7 @@ class MobileLoginPage {
     }
 
     public async clickOnSubmitButton(): Promise<void> {
-        //await (await this.getSubmitButtonEl()).waitForClickable(timeouts.medium, 'Submit Button is not clickable');
+        await (await this.getSubmitButtonEl()).isClickable();
         await (await this.getSubmitButtonEl()).click();
     }
 
@@ -88,7 +87,6 @@ class MobileLoginPage {
     }
 
     public async clickOnNavigationButton(): Promise<void> {
-        //await (await this.getBackButtonEl()).waitForClickable(timeouts.medium, 'Navigation Button is not clickable');
         await (await this.getBackButtonEl()).click();
         await (await this.getBackButtonEl()).click();
     }

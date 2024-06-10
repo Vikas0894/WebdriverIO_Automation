@@ -10,8 +10,9 @@ const allure_reporter_1 = __importDefault(require("@wdio/allure-reporter"));
 const fs_1 = __importDefault(require("fs"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
-// let headless = process.env.HEADLESS;
-let debug = process.env.DEBUG;
+dotenv.config();
+const headless = process.env.HEADLESS === "true";
+const debug = process.env.DEBUG === "true";
 
 //console.log(`value of the headless: ${headless}`);
 exports.config = {
@@ -71,8 +72,9 @@ exports.config = {
     // 'path/to/excluded/files'
   ],
 
-  // suites:{
-
+  // suites: {
+  //   smoke: ["./test-suites/smoke/**/*.feature"],
+  //   regression: ["./test-suites/regression/**/*.feature"]
   // },
   //
   // ============
@@ -90,7 +92,7 @@ exports.config = {
   // and 30 processes will get spawned. The property handles how many capabilities
   // from the same test should run tests.
   //
-  maxInstances: 10,
+  maxInstances: 1,
   //
   // If you have trouble getting all important capabilities together, check out the
   // Sauce Labs platform configurator - a great tool to configure your capabilities:
@@ -126,20 +128,19 @@ exports.config = {
           3. Make use of process.env obj to set headless flag
   
 */
-      maxInstances: 3,
+      maxInstances: 1,
       browserName: "chrome",
-      // "goog:chromeOptions": {
-      //   args:
-      //     headless.toUpperCase() === "Y"
-      //       ? [
-      //           "--disable-web-security",
-      //           "--headless",
-      //           "--disable-dev-shm-usage",
-      //           "--no-sandbox",
-      //           "--window-size=1920,1080",
-      //         ]
-      //       : [],
-      // },
+      "goog:chromeOptions": {
+        args: headless
+          ? [
+              "--disable-web-security",
+              "--headless",
+              "--disable-dev-shm-usage",
+              "--no-sandbox",
+              "--window-size=1920,1080",
+            ]
+          : [],
+      },
       acceptInsecureCerts: true,
       timeouts: { implicit: 10000, pageLoad: 20000, script: 30000 },
       // If outputDir is provided WebdriverIO can capture driver session logs
@@ -165,7 +166,7 @@ exports.config = {
   // Define all options that are relevant for the WebdriverIO instance here
   //
   // Level of logging verbosity: trace | debug | info | warn | error | silent
-  //logLevel: debug.toUpperCase() === "Y" ? "info" : "error",
+  logLevel: debug ? "info" : "error",
 
   //
   // Set specific log levels per logger
@@ -190,13 +191,6 @@ exports.config = {
   // with `/`, the base url gets prepended, not including the path portion of your baseUrl.
   // If your `url` parameter starts without a scheme or `/` (like `some/path`), the base url
   // gets prepended directly.
-
-  // baseUrl: "https://admin:admin@the-internet.herokuapp.com",
-  // baseUrl: "https://the-internet.herokuapp.com",
-  // baseUrl: "https://www.amazon.com",
-  // baseUrl: "https://www.saucedemo.com/",
-  // baseUrl: "http://localhost",
-
   //
   // Default timeout for all waitFor* commands.
   waitforTimeout: 10000,
@@ -206,7 +200,7 @@ exports.config = {
   connectionRetryTimeout: 120000,
   //
   // Default request retries count
-  connectionRetryCount: 3,
+  connectionRetryCount: 1,
   //
   // Test runner services
   // Services take over a specific job you don't want to take care of. They enhance
@@ -249,13 +243,14 @@ exports.config = {
         disableWebdriverScreenshotsReporting: false,
         useCucumberStepReporter: true,
       },
-
+    ],
+    [
       "junit",
       {
         outputDir: "junit-reports",
         outputFileFormat: function (options) {
           // optional
-          //return `results-${new Date().getDate()}.xml`;
+          //return `results-${new Date().getDate()}.xml`
           return `results-${options.cid}.xml`;
         },
       },
@@ -281,13 +276,8 @@ exports.config = {
     // <boolean> fail if there are any undefined or pending steps
     strict: false,
     // <string> (expression) only execute the features or scenarios with tags matching the expression
-
     // tagExpression: "@demo",
     tagExpression: "",
-    // tagExpression: "@WebTable",
-    // tagExpression: "@AdvancedScrolling",
-    // tagExpression: "@IOofficialWebsite",
-
     // <number> timeout for step definitions
     timeout: 300000,
     // <boolean> Enable this config to treat undefined definitions as warnings.
@@ -374,17 +364,7 @@ exports.config = {
    * @param {Object}                 context  Cucumber World object
    */
   beforeScenario: function (world, context) {
-    // console.log(`world is:${JSON.stringify(world)}`)
-    let arr = world.pickle.name.split(/:/);
-
-    // @ts-ignore
-    if (arr.length > 0) browser.config.testid = arr[0];
-
-    // @ts-ignore
-    if (!browser.config.testid)
-      throw Error(
-        `Error getting testid for current scenario:${world.pickle.name}`
-      );
+    beforeScenario.call(world);
   },
   /**
    *
@@ -413,9 +393,7 @@ exports.config = {
     console.log(`>> context is: ${JSON.stringify(context)}`);
 
     // Take screenshot if test case is failed
-    if (!result.passed) {
-      await browser.takeScreenshot();
-    }
+    await browser.takeScreenshot();
   },
   /**
    *
@@ -437,8 +415,9 @@ exports.config = {
    */
   afterFeature: function (uri, feature) {
     // Add more environment details
+    //@ts-ignore
     allure.addEnvironment("ENVIRONMENT", config.environments);
-    allure.addEnvironment("BROWSER", browserName);
+    //allure.addEnvironment('BROWSER', config.capabilities);
   },
 
   /**
@@ -475,13 +454,18 @@ exports.config = {
    * @param {Array.<Object>} capabilities list of capabilities details
    * @param {<Object>} results object containing test results
    */
-  // onComplete: function(exitCode, config, capabilities, results) {
-  // },
+  onComplete: async function (exitCode, config, capabilities, results) {
+    await after();
+  },
   /**
    * Gets executed when a refresh happens.
    * @param {String} oldSessionId session ID of the old session
    * @param {String} newSessionId session ID of the new session
    */
   // onReload: function(oldSessionId, newSessionId) {
+  // }
+  // after: async function (world, result, context) {
+  //   //   await sendEmailNotification(emailData.subject, emailData.body, emailData.toEmail, emailData.regards);
+  //   // await after();
   // }
 };

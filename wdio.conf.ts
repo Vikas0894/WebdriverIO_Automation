@@ -1,5 +1,5 @@
-//@ts-nocheck
-import { Capabilities } from '@wdio/types';
+//import { after,beforeScenario } from './src/helper/sendEmailNotification';
+import { after, beforeScenario } from './src/helper/hooks';
 import { path } from "app-root-path";
 import { config as configuration } from "dotenv";
 import fs from "fs";
@@ -7,9 +7,11 @@ import ts = require("typescript");
 console.log("appRoot", path);
 configuration({ path: `${path}/.env` });
 import allure from "@wdio/allure-reporter";
+import dotenv from 'dotenv';
 
-let headless = process.env.HEADLESS;
-let debug = process.env.DEBUG;
+dotenv.config();
+const headless = process.env.HEADLESS === 'true';
+const debug: boolean = process.env.DEBUG === 'true';
 
 export const config: WebdriverIO.Config = {
   //
@@ -88,7 +90,7 @@ export const config: WebdriverIO.Config = {
   // and 30 processes will get spawned. The property handles how many capabilities
   // from the same test should run tests.
   //
-  maxInstances: 10,
+  maxInstances: 1,
   //
   // If you have trouble getting all important capabilities together, check out the
   // Sauce Labs platform configurator - a great tool to configure your capabilities:
@@ -124,11 +126,11 @@ export const config: WebdriverIO.Config = {
           3. Make use of process.env obj to set headless flag
   
 */
-      maxInstances: 3,
+      maxInstances: 1,
       browserName: 'chrome',
       "goog:chromeOptions": {
         args:
-          headless.toUpperCase() === "Y"
+          headless
             ? [
               "--disable-web-security",
               "--headless",
@@ -163,7 +165,7 @@ export const config: WebdriverIO.Config = {
   // Define all options that are relevant for the WebdriverIO instance here
   //
   // Level of logging verbosity: trace | debug | info | warn | error | silent
-  logLevel: debug.toUpperCase() === "Y" ? "info" : "error",
+  logLevel: debug ? "info" : "error",
 
   //
   // Set specific log levels per logger
@@ -188,13 +190,6 @@ export const config: WebdriverIO.Config = {
   // with `/`, the base url gets prepended, not including the path portion of your baseUrl.
   // If your `url` parameter starts without a scheme or `/` (like `some/path`), the base url
   // gets prepended directly.
-
-  // baseUrl: "https://admin:admin@the-internet.herokuapp.com",
-  // baseUrl: "https://the-internet.herokuapp.com",
-  // baseUrl: "https://www.amazon.com",
-  // baseUrl: "https://www.saucedemo.com/",
-  // baseUrl: "http://localhost",
-
   //
   // Default timeout for all waitFor* commands.
   waitforTimeout: 10000,
@@ -204,7 +199,7 @@ export const config: WebdriverIO.Config = {
   connectionRetryTimeout: 120000,
   //
   // Default request retries count
-  connectionRetryCount: 3,
+  connectionRetryCount: 1,
   //
   // Test runner services
   // Services take over a specific job you don't want to take care of. They enhance
@@ -278,13 +273,8 @@ export const config: WebdriverIO.Config = {
     // <boolean> fail if there are any undefined or pending steps
     strict: false,
     // <string> (expression) only execute the features or scenarios with tags matching the expression
-
     // tagExpression: "@demo",
     tagExpression: "",
-    // tagExpression: "@WebTable",
-    // tagExpression: "@AdvancedScrolling",
-    // tagExpression: "@IOofficialWebsite",
-
     // <number> timeout for step definitions
     timeout: 300000,
     // <boolean> Enable this config to treat undefined definitions as warnings.
@@ -371,17 +361,7 @@ export const config: WebdriverIO.Config = {
    * @param {Object}                 context  Cucumber World object
    */
   beforeScenario: function (world, context) {
-    // console.log(`world is:${JSON.stringify(world)}`)
-    let arr = world.pickle.name.split(/:/);
-
-    // @ts-ignore
-    if (arr.length > 0) browser.config.testid = arr[0];
-
-    // @ts-ignore
-    if (!browser.config.testid)
-      throw Error(
-        `Error getting testid for current scenario:${world.pickle.name}`
-      );
+    beforeScenario.call(world);
   },
   /**
    *
@@ -432,8 +412,9 @@ export const config: WebdriverIO.Config = {
    */
   afterFeature: function (uri, feature) {
     // Add more environment details
+    //@ts-ignore
     allure.addEnvironment('ENVIRONMENT', config.environments);
-    allure.addEnvironment('BROWSER', browserName);
+    //allure.addEnvironment('BROWSER', config.capabilities);
   },
 
   /**
@@ -470,13 +451,18 @@ export const config: WebdriverIO.Config = {
    * @param {Array.<Object>} capabilities list of capabilities details
    * @param {<Object>} results object containing test results
    */
-  // onComplete: function(exitCode, config, capabilities, results) {
-  // },
+  onComplete: async function (exitCode, config, capabilities, results) {
+    await after();
+  },
   /**
    * Gets executed when a refresh happens.
    * @param {String} oldSessionId session ID of the old session
    * @param {String} newSessionId session ID of the new session
    */
   // onReload: function(oldSessionId, newSessionId) {
+  // }
+  // after: async function (world, result, context) {
+  //   //   await sendEmailNotification(emailData.subject, emailData.body, emailData.toEmail, emailData.regards);
+  //   // await after();
   // }
 };

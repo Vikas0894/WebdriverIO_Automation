@@ -4,11 +4,13 @@ import { config as configuration } from "dotenv";
 import fs from "fs";
 console.log("appRoot", path);
 configuration({ path: `${path}/.env` });
-import { configs } from "../config/enviroments-config";
+import { configs } from "./enviroments-config";
 import allure from "@wdio/allure-reporter";
 import { join } from "path";
-import { getPathAndriodApp } from "../config/enviroments-config";
-import { appiumServer } from "../src/helper/appium-server";
+import { getPathAndriodApp } from "./enviroments-config";
+import { AppiumServer } from "../src/helper/appium-server";
+
+const APPIUM_PORT = 4726; // Use a different port than 4723
 
 export const config: WebdriverIO.Config = {
 
@@ -90,7 +92,7 @@ export const config: WebdriverIO.Config = {
 
       // capabilities for local Appium web tests on an Android Emulator
       "platformName": "Android",
-      "appium:deviceName": "Pixel 8",
+      "appium:deviceName": "Small Phone API 33",
       'appium:platformVersion': '13',
       "appium:automationName": "UiAutomator2",
       "appium:appPackage": "com.code2lead.kwad",
@@ -103,8 +105,8 @@ export const config: WebdriverIO.Config = {
       timeouts: { implicit: 10000, pageLoad: 20000, script: 30000 },
       // If outputDir is provided WebdriverIO can capture driver session logs
       // it is possible to configure which logTypes to include/exclude.
-      // excludeDriverLogs: ['*'], // pass '*' to exclude all driver session logs
-      // excludeDriverLogs: ['bugreport', 'server'],
+      excludeDriverLogs: ['*'], // pass '*' to exclude all driver session logs
+      excludeDriverLogs: ['bugreport', 'server'],
     },
   ],
 
@@ -114,8 +116,7 @@ export const config: WebdriverIO.Config = {
   // Define all options that are relevant for the WebdriverIO instance here
   //
   //Level of logging verbosity: trace | debug | info | warn | error | silent
-  logLevel: "error",
-
+  //logLevel: "error",
   //
   // Set specific log levels per logger
   // loggers:
@@ -267,8 +268,15 @@ export const config: WebdriverIO.Config = {
    * @param {Array.<String>} specs List of spec file paths that are to be run
    * @param {String} cid worker id (e.g. 0-0)
    */
-  // beforeSession: function (config, capabilities, specs, cid) {
-  // },
+  beforeSession: async function (config, capabilities, specs, cid) {
+    try {
+      AppiumServer.setPort(APPIUM_PORT); // Set custom port
+      await AppiumServer.start();
+    } catch (error) {
+      console.error('Error starting Appium server:', error);
+      throw error;
+    }
+  },
   /**
    * Gets executed before test execution begins. At this point you can access to all global
    * variables like `browser`. It is the perfect place to define custom commands.
@@ -390,8 +398,14 @@ export const config: WebdriverIO.Config = {
    * @param {Array.<Object>} capabilities list of capabilities details
    * @param {Array.<String>} specs List of spec file paths that ran
    */
-  // afterSession: function (config, capabilities, specs) {
-  // },
+  afterSession: async function (config, capabilities, specs) {
+    try {
+      await AppiumServer.stop();
+    } catch (error) {
+      console.error('Error stopping Appium server:', error);
+      throw error;
+    }
+  },
   /**
    * Gets executed after all workers got shut down and the process is about to exit. An error
    * thrown in the onComplete hook will result in the test run failing.
@@ -410,13 +424,9 @@ export const config: WebdriverIO.Config = {
   // onReload: function(oldSessionId, newSessionId) {
   // }
 
-  before: async () => {
-    // Start the Appium server before running tests
-    await appiumServer.start();
-  },
+  // before: async () => {
+  // },
 
-  after: async () => {
-    // Stop the Appium server after tests
-    await appiumServer.stop();
-  },
+  // after: async () => {
+  // },
 };

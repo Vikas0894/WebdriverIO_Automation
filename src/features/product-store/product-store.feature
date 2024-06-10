@@ -1,4 +1,4 @@
-Feature: To Verify the url
+Feature: To verify the url
 
     @product_store @e2e
     Scenario Outline: Product-Store login and verify url
