@@ -7,6 +7,7 @@ var __importDefault =
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.config = void 0;
 const allure_reporter_1 = __importDefault(require("@wdio/allure-reporter"));
+import { after, beforeScenario } from './src/helper/hooks';
 const fs_1 = __importDefault(require("fs"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
