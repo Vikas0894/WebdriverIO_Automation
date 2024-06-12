@@ -1,13 +1,12 @@
 import { Given, Then, When } from "@wdio/cucumber-framework";
 import { browserMaximise } from "../../helper/browser/browser-maximise";
-import { loginPage } from "../../pages/login-other/login-page";
+import { loginPage } from "../../pages/login-product-store/login-page";
 import { assertEqual } from "../../helper/assert/assert-equal";
 import { browserOpenUrl } from "../../helper/browser/browser-open-url";
 import { browserGetUrl } from "../../helper/browser/browser-get-url";
 import { configs } from "../../../config/enviroments-config";
 import { readExcelFile } from "../../helper/files/read-excel-file";
 import logger from "../../helper/logger";
-import { $, $$, browser } from "@wdio/globals";
 
 Given(/^I am on product store home$/, async () => {
     await browserOpenUrl(configs.productStore);
@@ -29,8 +28,12 @@ Then(/^I verify the user$/, async () => {
 });
 
 Then(/^I verify (.*) on home page$/, async (expectedUrl: string) => {
-    const actulUrl=await browserGetUrl();
-    console.log('TestUrl',actulUrl);
-    await assertEqual(expectedUrl,actulUrl,'Url is not matched')
+    const actulUrl = await browserGetUrl();
+    console.log('TestUrl', actulUrl);
+    await assertEqual(expectedUrl, actulUrl, 'Url is not matched')
     await logger.info(`execution completed`);
+});
+
+When(/^I enetr invalid username and password on login page$/, async () => {
+   await loginPage.fillInvalidUnAndPwd();
 });

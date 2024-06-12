@@ -63,8 +63,10 @@
     "appium-uiautomator2-driver": "^3.0.6",
     "archiver": "^7.0.1",
     "chai": "^4.3.6",
-    "chromedriver": "^125.0.1",
+    "chromedriver": "^126.0.0",
     "csv-parse": "^5.5.5",
+    "csv-parser": "^3.0.0",
+    "csv-writer": "^1.6.0",
     "dotenv": "^16.4.5",
     "eslint": "^8.57.0",
     "eslint-plugin-react": "^7.34.2",
@@ -83,7 +85,7 @@
     "wd": "^1.14.0",
     "wdio-chromedriver-service": "^7.3.2",
     "wdio-geckodriver-service": "^2.1.2",
-    "winston": "^3.12.0",
+    "winston": "^3.13.0",
     "xlsx": "^0.18.5"
   }
 }

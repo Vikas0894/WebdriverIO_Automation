@@ -147,17 +147,17 @@ export const config: WebdriverIO.Config = {
       // it is possible to configure which logTypes to include/exclude.
       // excludeDriverLogs: ['*'], // pass '*' to exclude all driver session logs
       // excludeDriverLogs: ['bugreport', 'server'],
-    //},
+      //},
 
-    // {
-     // cross browser
+      // {
+      // cross browser
       // maxInstances: 3,
       // //
       // browserName: "firefox",
       // acceptInsecureCerts: true,
       // timeouts: { implicit: 10000, pageLoad: 20000, script: 30000 },
 
-     }
+    }
   ],
   //
   // ===================
@@ -209,7 +209,7 @@ export const config: WebdriverIO.Config = {
 
   // cross browser service
   //services: ["geckodriver"],
- services: ['chromedriver'],
+  services: ['chromedriver'],
 
   // Framework you want to run your specs with.
   // The following are supported: Mocha, Jasmine, and Cucumber
@@ -453,7 +453,7 @@ export const config: WebdriverIO.Config = {
    * @param {<Object>} results object containing test results
    */
   onComplete: async function (exitCode, config, capabilities, results) {
-    //await after();
+    await after();
   },
   /**
    * Gets executed when a refresh happens.

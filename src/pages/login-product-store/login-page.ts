@@ -2,7 +2,10 @@ import { timeouts } from "../../../config/timeouts-config";
 import { ButtonControl } from "../../base-controls/button-control";
 import { ElementControl } from "../../base-controls/element-control";
 import { InputControl } from "../../base-controls/input-control";
+import { assertEqual } from "../../helper/assert/assert-equal";
 import { validExcelCredential } from "../../helper/files/get-excel-data"
+import { getEmail } from "../../helper/get-email";
+import { getRandomString } from "../../helper/get-random-string";
 
 class LoginPage {
     protected async getLoginLinkEl(): Promise<ButtonControl> {
@@ -22,7 +25,7 @@ class LoginPage {
     };
 
     protected async getUserVerificationEl(): Promise<ElementControl> {
-        return new ElementControl(await $('//a[@id="nameofuser"]'));
+        return new ElementControl(await $('//li[@class="nav-item"]/a[@id="nameofuser"]'));
     };
 
     protected async getTitleEl(): Promise<ElementControl> {
@@ -45,6 +48,13 @@ class LoginPage {
 
     public async VerifyHomePage(): Promise<void> {
         await (await this.getUserVerificationEl()).expectToBeDisplayed('Welcome text is not displayed');
+    }
+
+    public async fillInvalidUnAndPwd(): Promise<void> {
+        await (await this.getLoginLinkEl()).click();
+        await (await this.getUsernameInputEl()).setValue(getEmail(7));
+        await (await this.getPasswordInputEl()).setValue(getRandomString('alphanumeric', 7));
+        await (await this.getLoginBtnEl()).click();
     }
 }
 export const loginPage = new LoginPage();

@@ -1,6 +1,6 @@
 Feature: To verify the url
 
-    @product_store @e2e
+    @product_store @e2e @valid_login
     Scenario Outline: Product-Store login and verify url
         Given I am on product store home
         Then I expect product store home page is displayed
