@@ -2,13 +2,16 @@ import { Given, Then, When } from '@wdio/cucumber-framework'
 import reporter from '../../helper/reporter';
 import constant from '../../../data/constant.json'
 import postPayload from '../../../data/payload/postPayload.json'
-import { apiMethods } from '../../helper/api-helper';
 import { configs } from '../../../config/enviroments-config';
 import fs from 'fs';
 import { assert } from 'chai';
 import report from '@wdio/allure-reporter'
+import { apiMethods } from '../../helper/api/api-helper';
+import { assertEqual } from '../../helper/assert/assert-equal';
 
-Given(/^get list of (.*) from reqres.in$/, async (endPointRef) => {
+let res: any;
+
+When(/^get list of (.*) from reqres.in$/, async (endPointRef) => {
     try {
         //@ts-ignore
         reporter.addStep(`${this.testid}`, 'info', `Getting the data from ${endPointRef}`);
@@ -19,10 +22,7 @@ Given(/^get list of (.*) from reqres.in$/, async (endPointRef) => {
         }
         report.addStep(`Validate end point: ${endPoint}`);
         if (!endPoint) throw Error(`${endPoint} is not valid endpoint.`);
-        let res;
         res = await apiMethods.getAllUsers(configs.reqresBaseURL, endPoint, "", constant.REQRES.QUERY_PARAM);
-        report.addStep(`Validate status code:  ${res.status}`);
-        if (res.status !== 200) assert.fail(`Failed getting user from ${configs.reqresBaseURL}/${endPoint}`);
         let data = JSON.stringify(res.body);
         report.addStep(`Fetch the response: ${data}`);
         let fileName = `${process.cwd()}/data/api-res/resreqAPIUsers.json`;
@@ -51,7 +51,12 @@ Given(/^Create a (.*) in reqres.in$/, async (endPointRef) => {
         let fileName = `${process.cwd()}/data/api-res/resreqAPICreateUsers.json`;
         fs.writeFileSync(fileName, data);
     } catch (err) {
-        const error =err as Error;
+        const error = err as Error;
         throw new Error(`${endPointRef}${error.message}`);
     }
+});
+
+Then('I should receive {int} status code', async (statusCode: number) => {
+    report.addStep(`Validate status code:  ${res.status}`);
+    await assertEqual(res.status, statusCode, 'Status is code not matched');
 });

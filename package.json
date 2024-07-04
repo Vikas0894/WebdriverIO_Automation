@@ -12,13 +12,13 @@
     "dev:hrmsLogin": "set HEADLESS=N && npx wdio wdio.conf.ts --cucumberOpts.tagExpression='@hrms'",
     "dev:productStore": "set HEADLESS=Y && npx wdio wdio.conf.ts --cucumberOpts.tagExpression='@product_store'",
     "div2": "==========================Mobile Local=========================================================",
-    "android-mobile-e2e": "set HEADLESS=N && npx wdio ./config/mobile-local-config.ts --cucumberOpts.tagExpression='@mobile'",
+    "android-local-mobile-e2e": "set HEADLESS=N && npx wdio ./config/mobile-local-config.ts --cucumberOpts.tagExpression='@wdioSignup'",
     "div3": "==========================Web Sauce Test=========================================================",
     "test-web-sauce-emulator": "set HEADLESS=N && npx wdio ./config/web-sauce-lab-config.ts --cucumberOpts.tagExpression='@product_store'",
     "div4": "==========================Mobile Sauce Test=========================================================",
-    "test-mobile-sauce-emulator": "set HEADLESS=N && npx wdio ./config/mobile-sauce-lab-config.ts --cucumberOpts.tagExpression='@mobile'",
+    "test-mobile-sauce-emulator": "set HEADLESS=N && npx wdio ./config/mobile-sauce-lab-config.ts --cucumberOpts.tagExpression='@wdioLogin'",
     "div5": "==========================API Test=========================================================",
-    "api_test_e2e": "set HEADLESS=Y && npx wdio wdio.conf.ts --cucumberOpts.tagExpression='@api'",
+    "api_test_e2e": "set HEADLESS=Y && npx wdio ./config/api-config.ts --cucumberOpts.tagExpression='@api'",
     "div6": "==========================Report=========================================================",
     "test": "wdio wdio.conf.js --reporters allure",
     "reports": "allure generate allure-results --clean  && allure open"
@@ -41,6 +41,7 @@
     "@sendgrid/mail": "^7.7.0",
     "@types/chai": "^4.3.1",
     "@types/jquery": "^3.5.29",
+    "@types/jsonpath": "^0.2.4",
     "@types/node": "^20.12.7",
     "@types/nodemailer": "^6.4.15",
     "@types/supertest": "^6.0.2",
@@ -74,6 +75,7 @@
     "get-stream": "^6.0.1",
     "globals": "^15.3.0",
     "i": "^0.3.7",
+    "jsonpath": "^1.1.1",
     "mailosaur": "^8.4.0",
     "nodemailer": "^6.9.13",
     "npm": "^10.5.0",
@@ -86,6 +88,7 @@
     "wdio-chromedriver-service": "^7.3.2",
     "wdio-geckodriver-service": "^2.1.2",
     "winston": "^3.13.0",
-    "xlsx": "^0.18.5"
+    "xlsx": "^0.18.5",
+    "axios": "^1.7.2"
   }
 }

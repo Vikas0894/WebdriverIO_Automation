@@ -13,7 +13,7 @@ export const beforeScenario = function (this: ITestCaseHookParameter) {
 
 export const capabilitiese = {
     platformName: 'Android',
-    'appium:app': 'storage:filename=Android_Demo_App.apk', // The filename of the mobile app
+    'appium:app': 'storage:filename=android.wdio.native.app.v1.0.8.apk', // The filename of the mobile app=Android_Demo_App.apk
     'appium:deviceName': 'Android GoogleAPI Emulator',
     'appium:platformVersion': '13.0',
     'appium:automationName': 'UiAutomator2',

@@ -7,10 +7,7 @@ configuration({ path: `${path}/.env` });
 import { configs } from "./enviroments-config";
 import allure from "@wdio/allure-reporter";
 import { join } from "path";
-import { getPathAndriodApp } from "./enviroments-config";
-import { AppiumServer } from "../src/helper/appium-server";
-
-const APPIUM_PORT = 4726; // Use a different port than 4723
+import { getPathAndriodApp, getPathWDIOApp } from "./enviroments-config";
 
 export const config: WebdriverIO.Config = {
 
@@ -21,15 +18,6 @@ export const config: WebdriverIO.Config = {
   // =====================
   // ts-node Configurations
   // =====================
-  //
-  // You can write tests using TypeScript to get autocompletion and type safety.
-  // You will need typescript and ts-node installed as devDependencies.
-  // WebdriverIO will automatically detect if these dependencies are installed
-  // and will compile your config and tests for you.
-  // If you need to configure how ts-node runs please use the
-  // environment variables for ts-node or use wdio config's autoCompileOpts section.
-  //
-
   autoCompileOpts: {
     autoCompile: true,
     tsNodeOpts: {
@@ -39,21 +27,10 @@ export const config: WebdriverIO.Config = {
   },
 
   port: 4723,
-
+  runner: 'local',
   // ==================
   // Specify Test Files
   // ==================
-  // Define which test specs should run. The pattern is relative to the directory
-  // from which `wdio` was called.
-  //
-  // The specs are defined as an array of spec files (optionally using wildcards
-  // that will be expanded). The test for each spec file will be run in a separate
-  // worker process. In order to have a group of spec files run in the same worker
-  // process simply enclose them in an array within the specs array.
-  //
-  // If you are calling `wdio` from an NPM script (see https://docs.npmjs.com/cli/run-script),
-  // then the current working directory is where your `package.json` resides, so `wdio`
-  // will be called from there.
   //
   specs: ["./src/features/**/*.feature"],
   // Patterns to exclude.
@@ -66,19 +43,8 @@ export const config: WebdriverIO.Config = {
 
   // Capabilities
   // ============
-  // Define your capabilities here. WebdriverIO can run multiple capabilities at the same
-  // time. Depending on the number of capabilities, WebdriverIO launches several test
-  // sessions. Within your capabilities you can overwrite the spec and exclude options in
-  // order to group specific specs to a specific capability.
   //
-  // First, you can define how many instances should be started at the same time. Let's
-  // say you have 3 different capabilities (Chrome, Firefox, and Safari) and you have
-  // set maxInstances to 1; wdio will spawn 3 processes. Therefore, if you have 10 spec
-  // files and you set maxInstances to 10, all spec files will get tested at the same time
-  // and 30 processes will get spawned. The property handles how many capabilities
-  // from the same test should run tests.
-  //
-  maxInstances: 10,
+  maxInstances: 1,
   //
   // If you have trouble getting all important capabilities together, check out the
   // Sauce Labs platform configurator - a great tool to configure your capabilities:
@@ -86,18 +52,15 @@ export const config: WebdriverIO.Config = {
   //
   capabilities: [
     {
-      // maxInstances can get overwritten per capability. So if you have an in-house Selenium
-      // grid with only 5 firefox instances available you can make sure that not more than
-      // 5 instances get started at a time.
-
       // capabilities for local Appium web tests on an Android Emulator
       "platformName": "Android",
-      "appium:deviceName": "Small Phone API 33",
+      "appium:deviceName": "Pixel API 33",
       'appium:platformVersion': '13',
       "appium:automationName": "UiAutomator2",
-      "appium:appPackage": "com.code2lead.kwad",
-      "appium:appActivity": "com.code2lead.kwad.MainActivity",
-      'appium:app': join(process.cwd(), getPathAndriodApp()),
+      // "appium:appPackage": "com.code2lead.kwad",
+      // "appium:appActivity": "com.code2lead.kwad.MainActivity",
+      //'appium:app': join(process.cwd(), getPathAndriodApp()),
+      'appium:app': join(process.cwd(), getPathWDIOApp()),
       //"appium:udid": "065613117T112979", //for real device
 
       maxInstances: 1,
@@ -105,8 +68,8 @@ export const config: WebdriverIO.Config = {
       timeouts: { implicit: 10000, pageLoad: 20000, script: 30000 },
       // If outputDir is provided WebdriverIO can capture driver session logs
       // it is possible to configure which logTypes to include/exclude.
-      excludeDriverLogs: ['*'], // pass '*' to exclude all driver session logs
-      excludeDriverLogs: ['bugreport', 'server'],
+      // excludeDriverLogs: ['*'], // pass '*' to exclude all driver session logs
+      // excludeDriverLogs: ['bugreport', 'server'],
     },
   ],
 
@@ -116,7 +79,7 @@ export const config: WebdriverIO.Config = {
   // Define all options that are relevant for the WebdriverIO instance here
   //
   //Level of logging verbosity: trace | debug | info | warn | error | silent
-  //logLevel: "error",
+  logLevel: "error",
   //
   // Set specific log levels per logger
   // loggers:
@@ -127,21 +90,16 @@ export const config: WebdriverIO.Config = {
   // - @wdio/sumologic-reporter
   // - @wdio/cli, @wdio/config, @wdio/utils
   // Level of logging verbosity: trace | debug | info | warn | error | silent
-  logLevels: {
-    webdriver: 'error',
-    '@wdio/appium-service': 'error'
-  },
+  // logLevels: {
+  //   webdriver: 'error',
+  //   '@wdio/appium-service': 'error'
+  // },
   //
   // If you only want to run your tests until a specific amount of tests have failed use
   // bail (default is 0 - don't bail, run all tests).
   bail: 0,
-  //
-  // Set a base URL in order to shorten url command calls. If your `url` parameter starts
-  // with `/`, the base url gets prepended, not including the path portion of your baseUrl.
-  // If your `url` parameter starts without a scheme or `/` (like `some/path`), the base url
-  // gets prepended directly.
-  // baseUrl: "http://localhost",
 
+  baseUrl: 'http://localhost',
   //
   // Default timeout for all waitFor* commands.
   waitforTimeout: 10000,
@@ -152,36 +110,19 @@ export const config: WebdriverIO.Config = {
   //
   // Default request retries count
   connectionRetryCount: 3,
-  //
-  // Test runner services
-  // Services take over a specific job you don't want to take care of. They enhance
-  // your test setup with almost no effort. Unlike plugins, they don't add new
-  // commands. Instead, they hook themselves up into the test process.
 
   // cross browser service
   //services: ["chromedriver", "geckodriver"],
   services: ['appium'],
 
-  // Framework you want to run your specs with.
-  // The following are supported: Mocha, Jasmine, and Cucumber
-  // see also: https://webdriver.io/docs/frameworks
-  //
-  // Make sure you have the wdio adapter package for the specific framework installed
-  // before running any tests.
   framework: "cucumber",
-  //
-  // The number of times to retry the entire specfile when it fails as a whole
+
   // specFileRetries: 1,
-  //
-  // Delay in seconds between the spec file retry attempts
+
   // specFileRetriesDelay: 0,
-  //
-  // Whether or not retried specfiles should be retried immediately or deferred to the end of the queue
+
   // specFileRetriesDeferred: false,
-  //
-  // Test reporter for stdout.
-  // The only one supported by default is 'dot'
-  // see also: https://webdriver.io/docs/dot-reporter
+
   reporters: [
     "spec",
     [
@@ -226,10 +167,6 @@ export const config: WebdriverIO.Config = {
   // =====
   // Hooks
   // =====
-  // WebdriverIO provides several hooks you can use to interfere with the test process in order to enhance
-  // it and to build services around it. You can either apply a single function or an array of
-  // methods to it. If one of them returns with a promise, WebdriverIO will wait until that promise got
-  // resolved to continue.
   /**
    * Gets executed once before all workers get launched.
    * @param {Object} config wdio configuration object
@@ -268,15 +205,15 @@ export const config: WebdriverIO.Config = {
    * @param {Array.<String>} specs List of spec file paths that are to be run
    * @param {String} cid worker id (e.g. 0-0)
    */
-  beforeSession: async function (config, capabilities, specs, cid) {
-    try {
-      AppiumServer.setPort(APPIUM_PORT); // Set custom port
-      await AppiumServer.start();
-    } catch (error) {
-      console.error('Error starting Appium server:', error);
-      throw error;
-    }
-  },
+  // beforeSession: async function (config, capabilities, specs, cid) {
+  //   try {
+  //     AppiumServer.setPort(APPIUM_PORT); // Set custom port
+  //     await AppiumServer.start();
+  //   } catch (error) {
+  //     console.error('Error starting Appium server:', error);
+  //     throw error;
+  //   }
+  // },
   /**
    * Gets executed before test execution begins. At this point you can access to all global
    * variables like `browser`. It is the perfect place to define custom commands.
@@ -360,9 +297,9 @@ export const config: WebdriverIO.Config = {
    * @param {number}                 result.duration  duration of scenario in milliseconds
    * @param {Object}                 context          Cucumber World object
    */
-  afterScenario: async function (world, result, context) {
-    await browser.takeScreenshot();
-  },
+  // afterScenario: async function (world, result, context) {
+  //   await browser.takeScreenshot();
+  // },
   /**
    *
    * Runs after a Cucumber Feature.
@@ -398,14 +335,14 @@ export const config: WebdriverIO.Config = {
    * @param {Array.<Object>} capabilities list of capabilities details
    * @param {Array.<String>} specs List of spec file paths that ran
    */
-  afterSession: async function (config, capabilities, specs) {
-    try {
-      await AppiumServer.stop();
-    } catch (error) {
-      console.error('Error stopping Appium server:', error);
-      throw error;
-    }
-  },
+  // afterSession: async function (config, capabilities, specs) {
+  //   try {
+  //     await AppiumServer.stop();
+  //   } catch (error) {
+  //     console.error('Error stopping Appium server:', error);
+  //     throw error;
+  //   }
+  // },
   /**
    * Gets executed after all workers got shut down and the process is about to exit. An error
    * thrown in the onComplete hook will result in the test run failing.

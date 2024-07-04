@@ -43,6 +43,16 @@ https://nodejs.org/en/download/
 
 **Tip:** Install `npm install -g appium-doctor` and run it from the command-line which checks if your java jdk and android sdk paths are set correctly or not.
 
+## How to inspect in to appium inspector 
+- Install the APK on your device/emulator: adb install /path/to/your/app.apk
+--> {
+  "platformName": "Android",
+  "appium:deviceName": "Pixel 7a API 33",
+  "appium:automationName": "UiAutomator2",
+  "appium:app": "C:/Users/baps/Downloads/android.wdio.native.app.v1.0.8.apk"
+}
+
+
 ## Installation
 
 ### Setup Scripts

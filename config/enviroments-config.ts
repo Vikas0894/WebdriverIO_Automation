@@ -12,3 +12,8 @@ export const getPathAndriodApp = (): string => {
    let path = '/app/android/Android_Demo_App.apk';
    return path;
 }
+
+export const getPathWDIOApp = (): string => {
+   let path = 'app/android/android.wdio.native.app.v1.0.8.apk';
+   return path;
+}
