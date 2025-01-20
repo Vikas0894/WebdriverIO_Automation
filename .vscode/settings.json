@@ -1,0 +1,8 @@
+{
+    "cucumber.features": [
+        "src/tests/**/*.feature"
+    ],
+    "cucumber.glue": [
+        "src/steps/**/*.ts"
+    ]
+}

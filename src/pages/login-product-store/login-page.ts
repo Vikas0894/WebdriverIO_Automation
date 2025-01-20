@@ -1,15 +1,13 @@
 import { timeouts } from "../../../config/timeouts-config";
-import { ButtonControl } from "../../base-controls/button-control";
 import { ElementControl } from "../../base-controls/element-control";
 import { InputControl } from "../../base-controls/input-control";
-import { assertEqual } from "../../helper/assert/assert-equal";
 import { validExcelCredential } from "../../helper/files/get-excel-data"
 import { getEmail } from "../../helper/get-email";
 import { getRandomString } from "../../helper/get-random-string";
 
 class LoginPage {
-    protected async getLoginLinkEl(): Promise<ButtonControl> {
-        return new ButtonControl(await $('//a[@id="login2"]'));
+    protected async getLoginLinkEl(): Promise<ElementControl> {
+        return new ElementControl(await $('//a[@id="login2"]'));
     };
 
     protected async getUsernameInputEl(): Promise<InputControl> {
@@ -20,8 +18,8 @@ class LoginPage {
         return new InputControl(await $('//input[@id="loginpassword"]'));
     };
 
-    protected async getLoginBtnEl(): Promise<ButtonControl> {
-        return new ButtonControl(await $('//button[@onclick="logIn()"]'));
+    protected async getLoginBtnEl(): Promise<ElementControl> {
+        return new ElementControl(await $('//button[@onclick="logIn()"]'));
     };
 
     protected async getUserVerificationEl(): Promise<ElementControl> {

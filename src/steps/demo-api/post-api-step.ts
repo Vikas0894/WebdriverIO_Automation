@@ -9,6 +9,11 @@ import axios from 'axios';
 
 let response: any;
 
+Given('I send a DELETE request to delete user with invalid ID', async function () {
+    const response = await axios.delete('https://reqres.in/api/users/invalidID');
+    this.response = response;
+  });
+
 When('I send a POST request with the following data', async (dataTable) => {
     try {
         const endPoint = constant.REQRES.CREATE_USER;

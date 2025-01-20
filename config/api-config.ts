@@ -84,7 +84,7 @@ export const config: WebdriverIO.Config = {
         timeout: 300000,
         // <boolean> Enable this config to treat undefined definitions as warnings.
         ignoreUndefinedDefinitions: false,
-      },
+    },
 
     onPrepare: function (config, capabilities) {
         if (process.env.RUNNER === "LOCAL" && fs.existsSync("./allure-results")) {

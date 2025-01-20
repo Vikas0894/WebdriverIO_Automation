@@ -1,6 +1,5 @@
 import { configs } from "../../../config/enviroments-config";
 import { timeouts } from "../../../config/timeouts-config";
-import { ButtonControl } from "../../base-controls/button-control";
 import { ElementControl } from "../../base-controls/element-control";
 import { InputControl } from "../../base-controls/input-control";
 import { browserMaximise } from "../../helper/browser/browser-maximise";
@@ -19,16 +18,16 @@ class HrmsLoginPage {
         return new InputControl(await $('//input[@name="password"]'));
     }
 
-    public async getLoginButtonEl(): Promise<ButtonControl> {
-        return new ButtonControl(await $('//button[@type="button"]'));
+    public async getLoginButtonEl(): Promise<ElementControl> {
+        return new ElementControl(await $('//button[@type="button"]'));
     }
 
     public async getErrorMsgEl(): Promise<ElementControl> {
         return new ElementControl(await $('./u_error-message'));
     }
 
-    public async getNextButtonEl(): Promise<ButtonControl> {
-        return new ButtonControl(await $('//button[@type="button"]'));
+    public async getNextButtonEl(): Promise<ElementControl> {
+        return new ElementControl(await $('//button[@type="button"]'));
     }
 
     /**

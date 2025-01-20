@@ -3,16 +3,15 @@ import { after, beforeScenario } from './src/helper/hooks';
 import { path } from "app-root-path";
 import { config as configuration } from "dotenv";
 import fs from "fs";
-import ts = require("typescript");
 console.log("appRoot", path);
 configuration({ path: `${path}/.env` });
 import allure from "@wdio/allure-reporter";
 import dotenv from 'dotenv';
+import { SlackReporterUtil } from './src/helper/reporters/slack-reprter';
 
 dotenv.config();
 const headless = process.env.HEADLESS === 'true';
-const debug: boolean = process.env.DEBUG === 'true';
-
+const debug: boolean = process.env.DEBUG === 'true'
 
 export const config: WebdriverIO.Config = {
   //
@@ -242,17 +241,18 @@ export const config: WebdriverIO.Config = {
         useCucumberStepReporter: true,
         disableWebdriverStepsReporting: true,
         disableWebdriverScreenshotsReporting: false,
+        addTags: true,
       },
     ],
-    // [
-    //   'junit', {
-    //     outputDir: "junit-reports",
-    //     outputFileFormat: function (options) { // optional
-    //       //return `results-${new Date().getDate()}.xml`
-    //       return `results-${options.cid}.xml`
-    //     }
-    //   }
-    // ],
+    [
+      'junit', {
+        outputDir: "junit-reports",
+        outputFileFormat: function (options) { // optional
+          //return `results-${new Date().getDate()}.xml`
+          return `results-${options.cid}.xml`
+        }
+      }
+    ],
   ],
 
   // If you are using Cucumber you need to specify the location of your step definitions.
@@ -361,9 +361,6 @@ export const config: WebdriverIO.Config = {
    * @param {ITestCaseHookParameter} world    world object containing information on pickle and test step
    * @param {Object}                 context  Cucumber World object
    */
-  beforeScenario: function (world, context) {
-    beforeScenario.call(world);
-  },
   /**
    *
    * Runs before a Cucumber Step.
@@ -403,8 +400,20 @@ export const config: WebdriverIO.Config = {
    * @param {number}                 result.duration  duration of scenario in milliseconds
    * @param {Object}                 context          Cucumber World object
    */
-  // afterScenario: function (world, result, context) {
-  // },
+  afterScenario: function (world, result, context) {
+    const tags = world.pickle.tags.map((tag: { name: string }) => tag.name);
+    const scenarioName = world.pickle.name;
+    const featureName = world.gherkinDocument.feature?.name;
+
+    // Save details for Slack notification
+    (global as any).scenarioTags = tags;
+    (global as any).scenarioName = scenarioName;
+    (global as any).featureName = featureName;
+
+    console.log(`Feature: ${featureName}`);
+    console.log(`Scenario: ${scenarioName}`);
+    console.log(`Tags: ${tags.join(', ')}`);
+  },
   /**
    *
    * Runs after a Cucumber Feature.
@@ -434,7 +443,7 @@ export const config: WebdriverIO.Config = {
    * @param {Array.<Object>} capabilities list of capabilities details
    * @param {Array.<String>} specs List of spec file paths that ran
    */
-  // after: function (result, capabilities, specs) {
+  // after: async function (result, capabilities, specs) {
   // },
   /**
    * Gets executed right after terminating the webdriver session.
@@ -453,7 +462,18 @@ export const config: WebdriverIO.Config = {
    * @param {<Object>} results object containing test results
    */
   onComplete: async function (exitCode, config, capabilities, results) {
+    /**
+     * To send email notification
+     */
     await after();
+
+    /**
+     * To send Slack notification
+     */
+    console.log('Test execution completed. Sending Slack notification...');
+    const username = process.env.USER || process.env.USERNAME || 'Unknown User';
+    await SlackReporterUtil.sendSlackNotification(username);
+    console.log('Slack notification sent.');
   },
   /**
    * Gets executed when a refresh happens.
@@ -462,8 +482,9 @@ export const config: WebdriverIO.Config = {
    */
   // onReload: function(oldSessionId, newSessionId) {
   // }
-  // after: async function (world, result, context) {
-  //   //   await sendEmailNotification(emailData.subject, emailData.body, emailData.toEmail, emailData.regards);
-  //   // await after();
-  // }
+  after: async function (world, result, context) {
+    console.log(`>> world: ${JSON.stringify(world)}`);
+    //   await sendEmailNotification(emailData.subject, emailData.body, emailData.toEmail, emailData.regards);
+    // await after();
+  }
 };

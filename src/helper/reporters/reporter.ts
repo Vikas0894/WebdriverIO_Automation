@@ -1,5 +1,5 @@
 import allure from "@wdio/allure-reporter"
-import logger from "./logger"
+import logger from "../logger"
 
 /**
  * Global reporter used for both logger and Allure.

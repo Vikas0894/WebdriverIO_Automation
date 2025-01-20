@@ -1,5 +1,4 @@
 import { Given, Then, When } from '@wdio/cucumber-framework'
-import reporter from '../../helper/reporter';
 import constant from '../../../data/constant.json'
 import postPayload from '../../../data/payload/postPayload.json'
 import { configs } from '../../../config/enviroments-config';
@@ -8,6 +7,7 @@ import { assert } from 'chai';
 import report from '@wdio/allure-reporter'
 import { apiMethods } from '../../helper/api/api-helper';
 import { assertEqual } from '../../helper/assert/assert-equal';
+import axios from 'axios';
 
 let res: any;
 
@@ -60,3 +60,8 @@ Then('I should receive {int} status code', async (statusCode: number) => {
     report.addStep(`Validate status code:  ${res.status}`);
     await assertEqual(res.status, statusCode, 'Status is code not matched');
 });
+
+When('get list of users from invalid endpoint', async function () {
+    const response = await axios.get('https://reqres.in/api/invalid-endpoint');
+    this.response = response;
+  });

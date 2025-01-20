@@ -351,8 +351,20 @@ export const config: WebdriverIO.Config = {
    * @param {Array.<Object>} capabilities list of capabilities details
    * @param {<Object>} results object containing test results
    */
-  // onComplete: function(exitCode, config, capabilities, results) {
-  // },
+  onComplete: function (exitCode, config, capabilities, results) {
+    /*
+    * To send email notification
+    */
+    await after();
+
+    /**
+     * To send Slack notification
+     */
+    console.log('Test execution completed. Sending Slack notification...');
+    const username = process.env.USER || process.env.USERNAME || 'Unknown User';
+    await SlackReporterUtil.sendSlackNotification(username);
+    console.log('Slack notification sent.');
+  },
   /**
    * Gets executed when a refresh happens.
    * @param {String} oldSessionId session ID of the old session

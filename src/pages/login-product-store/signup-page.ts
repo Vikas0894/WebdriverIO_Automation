@@ -1,14 +1,13 @@
 import { timeouts } from "../../../config/timeouts-config";
-import { ButtonControl } from "../../base-controls/button-control";
 import { ElementControl } from "../../base-controls/element-control";
 import { InputControl } from "../../base-controls/input-control";
 import { assertEqual } from "../../helper/assert/assert-equal";
-import { TEXT_CONFIG } from "../../../config/text-config";
 import { getEmail } from "../../helper/get-email";
 import { getRandomString } from "../../helper/get-random-string";
 import path from 'path';
 import { writeCSV } from "../../helper/files/write-csv-file";
 import { appendToCSV } from "../../helper/files/update-csv-file";
+import { TEXT_CONFIG } from "../../../config/text-config";
 
 const username = getEmail(7);
 const password = getRandomString('alphanumeric', 7);
@@ -21,12 +20,12 @@ const data = [
 const headers = ['username', 'password'];
 
 class SignupPage {
-    protected async getSignUpLinkEl(): Promise<ButtonControl> {
-        return new ButtonControl(await $('#signin2'));
+    protected async getSignUpLinkEl(): Promise<ElementControl> {
+        return new ElementControl(await $('#signin2'));
     };
 
-    protected async getTitleEl(): Promise<ButtonControl> {
-        return new ButtonControl(await $('#signInModalLabel'));
+    protected async getTitleEl(): Promise<ElementControl> {
+        return new ElementControl(await $('#signInModalLabel'));
     };
 
     protected async getSignUpUsernameInputEl(): Promise<InputControl> {
@@ -37,8 +36,8 @@ class SignupPage {
         return new InputControl(await $('//input[@id="sign-password"]'));
     };
 
-    protected async getSignUpBtnEl(): Promise<ButtonControl> {
-        return new ButtonControl(await $('//button[@onclick="register()"]'));
+    protected async getSignUpBtnEl(): Promise<ElementControl> {
+        return new ElementControl(await $('//button[@onclick="register()"]'));
     };
 
     /**

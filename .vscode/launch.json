@@ -1,15 +1,25 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-        {
-            "type": "chrome",
-            "request": "launch",
-            "name": "Launch Chrome against localhost",
-            "url": "http://localhost:8080",
-            "webRoot": "${workspaceFolder}"
-        }
+      {
+        "name": "Launch Chrome",
+        "request": "launch",
+        "type": "chrome",
+        "url": "https://www.demoblaze.com/",
+        "webRoot": "${workspaceFolder}"
+      },
+      
+
+      {
+        "type": "node",
+        "request": "launch",
+        "name": "Debug WebDriverIO Test",
+        "skipFiles": ["<node_internals>/**"],
+        "program": "../wdio.conf.ts",
+        "args": ["run", "wdio.conf.ts"],
+        "autoAttachChildProcesses": true,
+        "sourceMaps": true
+      }
     ]
-}
+  }
+  

@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "esnext",
+    "target": "ESNext",
     "outDir": "dist",
     "module": "CommonJS",
     "moduleResolution": "node",
@@ -12,6 +12,7 @@
     "sourceMap": true,
     "noImplicitAny": true,
     "strictPropertyInitialization": true,
+    "forceConsistentCasingInFileNames": true,
     "strictNullChecks": true,
     "skipLibCheck": true,
     "types": [
@@ -24,11 +25,9 @@
     ]
   },
   "include": [
-    "./src/**/*.ts", 
+    "./src/**/*.ts",
     "src/helper/sendEmailNotification.js",
-    "./custom-types.d.ts",
+    "./custom-types.d.ts"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }

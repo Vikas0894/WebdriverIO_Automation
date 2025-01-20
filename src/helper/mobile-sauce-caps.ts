@@ -4,7 +4,7 @@ const { join } = require('path');
 const wd = require('wd');
 let scenarioNames: string[] = [];
 
-console.log(`This is type of scenarioNames: ${typeof(scenarioNames)}`);
+console.log(`This is type of scenarioNames: ${typeof (scenarioNames)}`);
 
 export const beforeScenario = function (this: ITestCaseHookParameter) {
     const scenarioName = this.pickle.name;
@@ -13,7 +13,7 @@ export const beforeScenario = function (this: ITestCaseHookParameter) {
 
 export const capabilitiese = {
     platformName: 'Android',
-    'appium:app': 'storage:filename=android.wdio.native.app.v1.0.8.apk', // The filename of the mobile app=Android_Demo_App.apk
+    'appium:app': 'storage:filename=android.wdio.native.app.v1.0.8.apk',
     'appium:deviceName': 'Android GoogleAPI Emulator',
     'appium:platformVersion': '13.0',
     'appium:automationName': 'UiAutomator2',

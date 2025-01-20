@@ -1,29 +1,23 @@
-//import winston from "winston"
-import { format, createLogger, transports, log, info, Logger } from "winston"
+import path from 'path';
+import { createLogger, format, transports } from 'winston';
 
-// Format console.log
-const consoleFormat = format.printf(({ level, message
-}) => {
-    const logLevel = format.colorize().colorize(level, `${level.toUpperCase()}`)
-    return `[${logLevel}]: ${message}`
-});
+const timestamp = new Date().toISOString().replace(/:/g, "-");
+const logFileName = path.join("./logs", `wdio-${timestamp}.log`);
 
-// Loggerallure serve
+const customFormat = format.combine(
+    format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+    format.printf(({ level, message, timestamp }) => {
+        return `[${timestamp}] [${level.toUpperCase()}]: ${message}`;
+    })
+);
 
-let logger = createLogger({
+const logger = createLogger({
+    level: 'debug',
+    format: customFormat,
     transports: [
-        new transports.Console({
-            level: process.env.LOG_LEVEL,
-            handleExceptions: true,
-            format: format.combine(format.timestamp(), consoleFormat)
-        })
-    ]
+        new transports.Console(),
+        new transports.File({ filename: logFileName })
+    ],
 });
 
-// Print any unknown error
-logger.on("error", error => {
-    console.log("Unknown error in Winston logger")
-    console.log(error.message)
-});
-
-export default logger
+export default logger;

@@ -1,6 +1,5 @@
 import { TEXT_CONFIG } from "../../../config/text-config";
 import { timeouts } from "../../../config/timeouts-config";
-import { ButtonControl } from "../../base-controls/button-control";
 import { ElementControl } from "../../base-controls/element-control";
 import { InputControl } from "../../base-controls/input-control";
 import { assertEqual } from "../../helper/assert/assert-equal";
@@ -12,8 +11,8 @@ class WdioLoginPage {
     return new ElementControl(await $('//android.widget.ScrollView[@content-desc="Home-screen"]/android.view.ViewGroup/android.widget.ImageView[1]'));
   }
 
-  public async getHomeWidgetEl(): Promise<ButtonControl> {
-    return new ButtonControl(await $('//android.view.View[@content-desc="Home"]'));
+  public async getHomeWidgetEl(): Promise<ElementControl> {
+    return new ElementControl(await $('//android.view.View[@content-desc="Home"]'));
   }
 
   private async getHeaderTitleEl(): Promise<ElementControl> {

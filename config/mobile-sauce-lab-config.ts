@@ -128,10 +128,10 @@ export const config: WebdriverIO.Config = {
         console.log(`>> scenariop is: ${JSON.stringify(scenario)}`);
         console.log(`>> result is : ${JSON.stringify(result)}`);
         console.log(`>> context is: ${JSON.stringify(context)}`);
-    
+
         // Take screenshot if test case is failed
         await browser.takeScreenshot();
-      },
+    },
     /*
     * Runs after a Cucumber Feature.
     * @param {String}                   uri      path to feature file
@@ -142,6 +142,28 @@ export const config: WebdriverIO.Config = {
         //@ts-ignore
         allure.addEnvironment('ENVIRONMENT', config.environments);
         //allure.addEnvironment('BROWSER', config.capabilities);
+    },
+    /**
+     * Gets executed after all workers got shut down and the process is about to exit. An error
+     * thrown in the onComplete hook will result in the test run failing.
+     * @param exitCode 
+     * @param config 
+     * @param capabilities 
+     * @param results 
+     */
+    onComplete: function (exitCode, config, capabilities, results) {
+        /**
+     * To send email notification
+     */
+        await after();
+
+        /**
+         * To send Slack notification
+         */
+        console.log('Test execution completed. Sending Slack notification...');
+        const username = process.env.USER || process.env.USERNAME || 'Unknown User';
+        await SlackReporterUtil.sendSlackNotification(username);
+        console.log('Slack notification sent.');
     },
     /*
     * Gets executed when a refresh happens.
