@@ -1,16 +1,18 @@
-const { after, beforeScenario } = require('./src/helper/hooks');
-const { path } = require('app-root-path');
-const { config: configuration } = require('dotenv');
-const fs = require('fs');
+const { after, beforeScenario } = require("./src/helper/hooks");
+const { path } = require("app-root-path");
+const { config: configuration } = require("dotenv");
+const fs = require("fs");
 console.log("appRoot", path);
 configuration({ path: `${path}/.env` });
-const allure = require('@wdio/allure-reporter');
-const dotenv = require('dotenv');
-const { SlackReporterUtil } = require('./src/helper/reporters/slack-reprter');
+const allure = require("@wdio/allure-reporter");
+const dotenv = require("dotenv");
+const { SlackReporterUtil } = require("./src/helper/reporters/slack-reprter");
+require("ts-node").register({ files: true });
+require("tsconfig-paths/register");
 
 dotenv.config();
-const headless = process.env.HEADLESS === 'true';
-const debug = process.env.DEBUG === 'true';
+const headless = process.env.HEADLESS === "true";
+const debug = process.env.DEBUG === "true";
 
 exports.config = {
   autoCompileOpts: {
@@ -20,16 +22,16 @@ exports.config = {
       project: "./tsconfig.json",
     },
   },
-  
+
   specs: ["./src/features/**/*.feature"],
   exclude: [],
 
   maxInstances: 1,
-  
+
   capabilities: [
     {
       maxInstances: 1,
-      browserName: 'chrome',
+      browserName: "chrome",
       "goog:chromeOptions": {
         args: headless
           ? [
@@ -53,7 +55,7 @@ exports.config = {
   connectionRetryTimeout: 120000,
   connectionRetryCount: 1,
 
-  services: ['chromedriver'],
+  services: ["chromedriver"],
 
   framework: "cucumber",
 
@@ -70,7 +72,7 @@ exports.config = {
       },
     ],
     [
-      'junit',
+      "junit",
       {
         outputDir: "junit-reports",
         outputFileFormat: function (options) {
@@ -110,7 +112,7 @@ exports.config = {
   },
 
   afterScenario: function (world, result, context) {
-    const tags = world.pickle.tags.map(tag => tag.name);
+    const tags = world.pickle.tags.map((tag) => tag.name);
     const scenarioName = world.pickle.name;
     const featureName = world.gherkinDocument.feature?.name;
 
@@ -120,10 +122,24 @@ exports.config = {
 
     console.log(`Feature: ${featureName}`);
     console.log(`Scenario: ${scenarioName}`);
-    console.log(`Tags: ${tags.join(', ')}`);
+    console.log(`Tags: ${tags.join(", ")}`);
+  },
+  onComplete: async function (exitCode, config, capabilities, results) {
+    /**
+     * To send email notification
+     */
+    await after();
+
+    /**
+     * To send Slack notification
+     */
+    console.log("Test execution completed. Sending Slack notification...");
+    const username = process.env.USER || process.env.USERNAME || "Unknown User";
+    await SlackReporterUtil.sendSlackNotification(username);
+    console.log("Slack notification sent.");
   },
 
   afterFeature: function (uri, feature) {
-    allure.addEnvironment('ENVIRONMENT', exports.config.environments);
+    allure.addEnvironment("ENVIRONMENT", exports.config.environments);
   },
 };
